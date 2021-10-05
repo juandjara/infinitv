@@ -64,8 +64,8 @@ export default function UserMenu() {
                     <RoleTags user={user} />
                   </p>
                 </div>
-                {menuItems.forEach(m => (
-                  <Menu.Item>
+                {menuItems.map(m => (
+                  <Menu.Item key={m.href}>
                     {({ active }) => (
                       <MenuLink active={active} href={m.href} onClick={m.onClick}>
                         {m.label}
