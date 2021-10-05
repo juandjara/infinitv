@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --gradient-light: #6EE7B7;
+  --gradient-dark: #047857;
+  --gradient: conic-gradient(var(--gradient-dark), var(--gradient-light));
+}
+
 html,
 body {
   padding: 0;
