@@ -1,14 +1,9 @@
 @import '~nprogress/nprogress.css';
+@import './bgimage.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --gradient-light: #6EE7B7;
-  --gradient-dark: #047857;
-  --gradient: conic-gradient(var(--gradient-dark), var(--gradient-light));
-}
 
 html,
 body {
@@ -42,29 +37,3 @@ label[for] {
 * {
   box-sizing: border-box;
 }
-
-/* main layout bg image styles */
-.bgimage {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.bgimage::after {
-  content: '';
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  opacity: 0.75;
-  background: var(--gradient);  
-}
-

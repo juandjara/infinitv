@@ -18,11 +18,11 @@ function TransitionMenuIcon({ as: Component, show }) {
 }
 
 const links = [
-  { role: 'superadmin', href: '/users', text: 'Usuarios' },
+  { href: '/player', text: 'Reproductor' },
   { href: '/posts', text: 'Series' },
   { href: '/catalog', text: 'Peliculas' },
   { href: '/sections', text: 'Descargas' },
-  { href: '/r', text: 'Reproductor' }
+  { role: 'superadmin', href: '/users', text: 'Usuarios' }
 ]
 
 export default function Nav() {
@@ -43,14 +43,14 @@ export default function Nav() {
 
   return (
     <>
-      <div className="hidden md:flex flex-1 mx-1 space-x-1">
+      <div className="w-full hidden md:flex flex-col flex-1">
         {filteredLinks.map(l => (
           <NavLink key={l.href} href={l.href}>
             {l.text}
           </NavLink>
         ))}
       </div>
-      <div className="md:hidden flex-1 z-20 relative">
+      <div className="w-full md:hidden flex-1 z-20 relative">
         <Menu>
           {({ open }) => (
             <>

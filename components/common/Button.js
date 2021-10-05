@@ -2,7 +2,7 @@ function getPadding({ hasIcon, small }) {
   let padding = ''
   if (small) {
     if (hasIcon) {
-      padding = hasIcon === 'only' ? 'p-1.5' : 'px-3 py-1.5'
+      padding = hasIcon === 'only' ? 'p-2' : 'px-3 py-2'
     } else {
       padding = 'px-3 py-1'
     }

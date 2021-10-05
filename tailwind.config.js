@@ -8,7 +8,7 @@ module.exports = {
       ...colors,
       transparent: 'transparent',
       current: 'currentColor',
-      primary: colors.emerald
+      primary: colors.amber
     },
     extend: {
       gridTemplateColumns: {

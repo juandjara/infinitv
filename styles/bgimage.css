@@ -1,0 +1,30 @@
+:root {
+  --gradient-light: #93C5FD;
+  --gradient-dark: #1D4ED8;
+  --gradient: conic-gradient(from 0deg at 50% 50%, var(--gradient-light), var(--gradient-dark));
+}
+
+/* main layout bg image styles */
+.bgimage {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.bgimage::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.75;
+  background: var(--gradient);  
+}

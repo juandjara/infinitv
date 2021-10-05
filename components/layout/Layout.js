@@ -6,7 +6,7 @@ import UserMenu from './UserMenu'
 
 export default function Layout({ children }) {
   return (
-    <div className="relative flex flex-col text-white h-screen">
+    <div className="relative flex flex-col text-white h-screen font-sans">
       <Head>
         <meta name="theme-color" content="#c0392b" />
         <meta
@@ -18,16 +18,19 @@ export default function Layout({ children }) {
       <div className="bgimage">
         <Image src="/img/dice-bg.jpg" priority layout="fill" objectFit="cover" />
       </div>
-      <nav className="flex items-start justify-center">
-        <Nav />
-        <Link href="/">
-          <a className="hover:opacity-75">
-            <Image src="/img/index_bg.png" width={75} height={75} />
-          </a>
-        </Link>
-        <UserMenu />
-      </nav>
-      {children}
+      <div className="h-full md:flex align-stretch">
+        <nav style={{ minWidth: 256 }} className="md:pb-4 flex md:flex-col items-start justify-center md:bg-gray-700 md:bg-opacity-25">
+          <Link href="/">
+            <a className="h-20 hidden md:flex items-center px-4 hover:opacity-75">
+              <p className="text-3xl mr-4">Palomitas</p>
+              {/* <Image src="/img/index_bg.png" width={75} height={75} /> */}
+            </a>
+          </Link>
+          <Nav />
+          <UserMenu />
+        </nav>
+        {children}
+      </div>
     </div>
   )
 }
