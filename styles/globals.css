@@ -13,6 +13,11 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+:root {
+  --login-card-height: 640px;
+  --nav-min-width: 256px;
+}
+
 body {
   background-color: #444;
 }
