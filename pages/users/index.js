@@ -50,7 +50,12 @@ export default function UserList({ showAccessColumn = true }) {
         <ul className="">
           {users ? (
             users.map(user => (
-              <UserListItem key={user.id} user={user} showAccessColumn={showAccessColumn} selected={isSelected(user)} />
+              <UserListItem
+                key={user.id}
+                user={user}
+                showAccessColumn={showAccessColumn}
+                selected={isSelected(user)}
+              />
             ))
           ) : (
             <>

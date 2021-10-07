@@ -45,7 +45,10 @@ export default function Login() {
   async function handleSubmit(ev) {
     ev.preventDefault()
     setLoading(true)
-    const { error } = await supabase.auth.signIn({ email, password }, { redirectTo: window.location.origin })
+    const { error } = await supabase.auth.signIn(
+      { email, password },
+      { redirectTo: window.location.origin }
+    )
     if (error) {
       console.error(error)
       setAlert(translateErrorMessage(error.message))
@@ -79,7 +82,9 @@ export default function Login() {
             priority
           />
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col text-left max-w-md md:px-6 px-4 py-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col text-left max-w-md md:px-6 px-4 py-4">
           <div className="flex-auto"></div>
           <h1 className="text-lg mb-6">Iniciar sesi&oacute;n</h1>
           <div>
@@ -146,8 +151,8 @@ export default function Login() {
           <div className="flex-auto"></div>
           <p className="mt-6 mb-2 text-xs">
             <em>
-              * Un enlace único es un enlace que se envia a tu dirección de correo para que puedas entrar sin necesidad
-              de recordar una contraseña.
+              * Un enlace único es un enlace que se envia a tu dirección de correo para que puedas
+              entrar sin necesidad de recordar una contraseña.
             </em>
           </p>
         </form>

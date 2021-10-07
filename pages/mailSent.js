@@ -57,7 +57,8 @@ export default function MailSentScreen() {
           </Transition>
           <p className="my-4 text-xl font-medium">Tienes un e-mail!</p>
           <p className="mb-4 text-base">
-            Comprueba tu bandeja de entrada para encontrar el enlace que te hemos enviado y {actionLabel}.
+            Comprueba tu bandeja de entrada para encontrar el enlace que te hemos enviado y{' '}
+            {actionLabel}.
           </p>
           <a className="hover:no-underline" href={`http://${emailDomain}`} rel="noopener">
             <Button

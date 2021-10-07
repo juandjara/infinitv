@@ -75,7 +75,9 @@ export default function CredentialsEdit() {
   return (
     <>
       <h2 className="text-xl font-medium">Credenciales</h2>
-      <p className="mt-1 mb-6 text-sm text-gray-600">Informaci&oacute;n de inicio de sesi&oacute;n</p>
+      <p className="mt-1 mb-6 text-sm text-gray-600">
+        Informaci&oacute;n de inicio de sesi&oacute;n
+      </p>
       <form className="space-y-6" onSubmit={handlePasswordSubmit}>
         <div className="md:w-1/2">
           <Label name="email" text="Email" />
@@ -118,7 +120,11 @@ export default function CredentialsEdit() {
         </div>
         <div className="flex items-center justify-between">
           <div>
-            {error && <p className="text-primary-700 text-xs mt-1 mr-2">La contraseña actual no es correcta</p>}
+            {error && (
+              <p className="text-primary-700 text-xs mt-1 mr-2">
+                La contraseña actual no es correcta
+              </p>
+            )}
             {!passwordValid && <WeakPasswordWarning />}
           </div>
           <Button

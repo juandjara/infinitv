@@ -73,7 +73,8 @@ function EmailForm({ header, className, style }) {
         <span>Enviar correo de recuperaci&oacute;n</span>
       </Button>
       <p className="text-sm mt-2">
-        Enviaremos un correo a tu direcci&oacute;n con un enlace &uacute;nico para que puedas cambiar tu contraseña
+        Enviaremos un correo a tu direcci&oacute;n con un enlace &uacute;nico para que puedas
+        cambiar tu contraseña
       </p>
     </form>
   )

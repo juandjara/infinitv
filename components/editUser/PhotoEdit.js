@@ -62,7 +62,13 @@ export default function PhotoEdit({ user, onChange }) {
           )}
           <Avatar size={64} user={user} preview={previewURL} />
         </div>
-        <input id="profile_picture" className="hidden" type="file" onChange={handleFile} ref={inputRef} />
+        <input
+          id="profile_picture"
+          className="hidden"
+          type="file"
+          onChange={handleFile}
+          ref={inputRef}
+        />
         <Button
           small
           title="Subir nueva foto de perfil"

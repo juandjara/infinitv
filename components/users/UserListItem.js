@@ -45,7 +45,10 @@ export default function UserListItem({ showAccessColumn, user, selected }) {
         className={`${
           selected ? 'bg-gray-100' : ''
         } hover:bg-gray-100 focus:bg-gray-100 hover:no-underline focus:outline-none text-gray-700 py-2 px-3 md:px-4 flex items-center space-x-3 md:space-x-4`}>
-        <Avatar user={user} border={selected ? 'border-primary-500' : 'border-primary-500 border-opacity-25'} />
+        <Avatar
+          user={user}
+          border={selected ? 'border-primary-500' : 'border-primary-500 border-opacity-25'}
+        />
         <div className="truncate flex-auto space-y-1">
           <Link href={`/users/edit?id=${user?.id || ''}`}>
             <a ref={linkRef} className="space-x-1 font-semibold text-gray-700 focus:outline-none">

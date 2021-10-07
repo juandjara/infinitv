@@ -34,7 +34,9 @@ export default function UserFiltersPanel() {
   const { params } = useQueryParams()
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef(null)
-  const hasFilters = Boolean(Number(params.rpp || DEFAULT_RPP) !== DEFAULT_RPP || params.sk || params.st)
+  const hasFilters = Boolean(
+    Number(params.rpp || DEFAULT_RPP) !== DEFAULT_RPP || params.sk || params.st
+  )
 
   const [filters, setFilters] = useState(() => initialFilterState(params))
   const { role, rpp, sortKey, sortType } = filters
@@ -106,7 +108,9 @@ export default function UserFiltersPanel() {
         onClick={() => setOpen(!open)}>
         <FilterIcon width={20} height={20} />
         <span className="md:inline hidden">Filtros</span>
-        {hasFilters && <span className="flex h-2 w-2 absolute -top-1 -right-1 rounded-full bg-primary-200"></span>}
+        {hasFilters && (
+          <span className="flex h-2 w-2 absolute -top-1 -right-1 rounded-full bg-primary-200"></span>
+        )}
       </Button>
       <div
         className={`${

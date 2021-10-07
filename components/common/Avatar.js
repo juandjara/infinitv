@@ -14,7 +14,13 @@ function getInitials(text = '') {
         .join('')
 }
 
-export default function Avatar({ user, preview, className = '', size = 64, border = 'border-gray-100' }) {
+export default function Avatar({
+  user,
+  preview,
+  className = '',
+  size = 64,
+  border = 'border-gray-100'
+}) {
   const CN = `${border} ${className} bg-white relative flex-shrink-0 rounded-full border-2`
   const style = { width: size + 4, height: size + 4 }
 

@@ -52,7 +52,12 @@ export default function Select({
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+              />
             </svg>
           </Listbox.Button>
           <Transition
@@ -67,7 +72,11 @@ export default function Select({
               {options.map((opt, i) => (
                 <Listbox.Option as={Fragment} key={opt.value} value={opt} disabled={opt.disabled}>
                   {({ active }) => (
-                    <li className={`${getBorder(i)} ${getBackground(active, opt)} py-2 px-4 cursor-pointer`}>
+                    <li
+                      className={`${getBorder(i)} ${getBackground(
+                        active,
+                        opt
+                      )} py-2 px-4 cursor-pointer`}>
                       {opt.label}
                     </li>
                   )}

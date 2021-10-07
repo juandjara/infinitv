@@ -85,7 +85,9 @@ export default function SearchBox({ route }) {
         onClick={() => setOpen(true)}>
         <SearchIcon width={20} height={20} />
         <span className="md:inline hidden">B&uacute;squeda</span>
-        {search && <span className="flex h-2 w-2 absolute -top-1 -right-1 rounded-full bg-primary-200"></span>}
+        {search && (
+          <span className="flex h-2 w-2 absolute -top-1 -right-1 rounded-full bg-primary-200"></span>
+        )}
       </Button>
       <form
         onSubmit={ev => applySearch(search, ev)}
@@ -116,11 +118,17 @@ export default function SearchBox({ route }) {
         <input type="submit" hidden />
         {recentSearches.length ? (
           <div className="absolute w-full top-full rounded-md bg-primary-900">
-            <p className="text-xs text-gray-300 uppercase tracking-wider p-2 pt-3">B&uacute;squedas recientes</p>
+            <p className="text-xs text-gray-300 uppercase tracking-wider p-2 pt-3">
+              B&uacute;squedas recientes
+            </p>
             <ul>
               {recentSearches.map(q => (
                 <li key={q} className="px-2 py-2 flex items-center">
-                  <ClockIcon className="text-gray-300 opacity-75 flex-shrink-0" height={20} width={20} />
+                  <ClockIcon
+                    className="text-gray-300 opacity-75 flex-shrink-0"
+                    height={20}
+                    width={20}
+                  />
                   <Link href={`${route}?q=${q}`}>
                     <a className="ml-2 flex-grow">{q}</a>
                   </Link>
