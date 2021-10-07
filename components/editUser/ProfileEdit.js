@@ -7,10 +7,8 @@ import { useAlert } from '@/components/alert/AlertContext'
 import Button from '@/components/common/Button'
 import Label from '@/components/common/Label'
 import Spinner from '@/components/common/Spinner'
-// import uploadImage from '@/lib/images/uploadImage'
-// import PhotoEdit from './PhotoEdit'
-
-function uploadImage() {}
+import uploadAvatar from '@/lib/uploadAvatar'
+import PhotoEdit from '@/components/editUser/PhotoEdit'
 
 export default function ProfileEdit() {
   const router = useRouter()
@@ -28,23 +26,15 @@ export default function ProfileEdit() {
     setForm(form => ({ ...form, [key]: value }))
   }
 
-  // function handleAvatarChange({ url, filename }) {
-  //   update('avatar', filename || null)
-  //   update('avatar_url', url || null)
-  // }
-
   async function handleSubmit(ev) {
     ev.preventDefault()
     try {
       let avatar = form.avatar
       if (avatar && avatar !== user.avatar) {
-        const newAvatar = await uploadImage({
-          url: form.avatar_url,
-          folder: 'avatar',
-          filename: avatar
-        })
+        const newAvatar = await uploadAvatar(avatar)
         avatar = newAvatar
       }
+
       await mutate(`profile/${user.id}`, async user => {
         const data = await updateProfile({ ...form, avatar })
         return { ...user, ...data }
@@ -61,7 +51,7 @@ export default function ProfileEdit() {
 
   return (
     <form className="space-y-6 flex-auto" onSubmit={handleSubmit}>
-      {/* <PhotoEdit user={form} onChange={handleAvatarChange} /> */}
+      <PhotoEdit user={form} onChange={file => update('avatar', file)} />
       <div className="max-w-sm">
         <div className="mb-1 w-full flex items-center justify-between">
           <Label name="name" text="Nombre" />
@@ -90,7 +80,7 @@ export default function ProfileEdit() {
         <textarea
           rows="3"
           id="bio"
-          value={form?.bio}
+          value={form?.bio || ''}
           maxLength={BIO_MAXLENGTH}
           onChange={ev => update('bio', ev.target.value)}
           className="shadow-sm block w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-700 focus:border-primary-700"

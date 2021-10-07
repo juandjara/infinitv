@@ -42,7 +42,9 @@ export default function UserMenu() {
       <Menu>
         {({ open }) => (
           <>
-            <Menu.Button title="Open user menu" className={`w-full flex items-center p-4 hover:bg-gray-700 hover:bg-opacity-25`}>
+            <Menu.Button
+              title="Open user menu"
+              className={`w-full flex items-center p-4 hover:bg-gray-700 hover:bg-opacity-25`}>
               <span className="sr-only">Open user menu</span>
               <Avatar user={user} size={44} border="border-white" />
               <p className="hidden md:block ml-4">{user.name}</p>

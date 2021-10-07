@@ -12,7 +12,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function SonarrSettings() {
+export default function RadarrSettings() {
   const [form, setForm] = useState(defaultSettings)
 
   function update(key, value) {

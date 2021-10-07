@@ -60,7 +60,10 @@ export default function MailSentScreen() {
             Comprueba tu bandeja de entrada para encontrar el enlace que te hemos enviado y {actionLabel}.
           </p>
           <a className="hover:no-underline" href={`http://${emailDomain}`} rel="noopener">
-            <Button className="my-2 shadow-md border-none" color="text-white" background="bg-primary-500 hover:bg-primary-700">
+            <Button
+              className="my-2 shadow-md border-none"
+              color="text-white"
+              background="bg-primary-500 hover:bg-primary-700">
               Ir a {emailDomain}
             </Button>
           </a>

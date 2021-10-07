@@ -12,7 +12,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function SonarrSettings({ onSave }) {
+export default function MediaServerSettings() {
   const [form, setForm] = useState(defaultSettings)
 
   function update(key, value) {

@@ -17,3 +17,5 @@ GRANT usage ON SCHEMA auth TO superadmin;
 
 GRANT SELECT, UPDATE ON auth.users TO superadmin;
 
+GRANT usage ON SCHEMA storage TO superadmin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA storage TO superadmin;

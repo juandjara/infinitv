@@ -1,5 +1,5 @@
 import Skeleton from 'react-loading-skeleton'
-// import ImageKit from './ImageKit'
+import SupabaseAvatar from './SupabaseAvatar'
 
 function getInitials(text = '') {
   text = text.trim()
@@ -21,7 +21,7 @@ export default function Avatar({ user, preview, className = '', size = 64, borde
   if (preview) {
     return (
       <div className={CN} style={style}>
-        <img alt="" className="rounded-full w-full h-full object-cover" src={preview} />
+        <img alt="avatar" className="rounded-full w-full h-full object-cover" src={preview} />
       </div>
     )
   }
@@ -30,45 +30,20 @@ export default function Avatar({ user, preview, className = '', size = 64, borde
     return <Skeleton className={className} width={style.width} height={style.height} circle />
   }
 
-  const name = user.name
-  const initials = getInitials(name)
-  return (
-    <div className={CN} style={style}>
-      <img
-        alt=""
-        className="rounded-full"
-        src={`https://avatar.tobi.sh/${name}.svg?text=${initials}`}
-        width={size}
-        height={size}
-      />
-    </div>
-  )
+  if (!user.avatar) {
+    const initials = getInitials(user.name)
+    return (
+      <div className={CN} style={style}>
+        <img
+          alt="avatar"
+          className="rounded-full"
+          src={`https://avatar.tobi.sh/${user.name}.svg?text=${initials}`}
+          width={size}
+          height={size}
+        />
+      </div>
+    )
+  }
 
-  // if (!user?.avatar) {
-  //   const name = user.name
-  //   const initials = getInitials(name)
-  //   return (
-  //     <div className={CN} style={style}>
-  //       <img
-  //         alt=""
-  //         className="rounded-full"
-  //         src={`https://avatar.tobi.sh/${name}.svg?text=${initials}`}
-  //         width={size}
-  //         height={size}
-  //       />
-  //     </div>
-  //   )
-  // }
-
-  // return (
-  //   <div className={CN} style={style}>
-  //     <ImageKit
-  //       alt=""
-  //       className="rounded-full"
-  //       src={`avatar/${user?.avatar}`}
-  //       width={size}
-  //       height={size}
-  //     />
-  //   </div>
-  // )
+  return <SupabaseAvatar url={user.avatar} className={CN} style={style} />
 }
