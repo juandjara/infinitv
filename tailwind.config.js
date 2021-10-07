@@ -23,5 +23,5 @@ module.exports = {
       height: ['group-hover']
     }
   },
-  plugins: []
+  plugins: [require('@tailwindcss/forms')]
 }

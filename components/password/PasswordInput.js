@@ -47,7 +47,7 @@ export default function PasswordInput({
         <input
           {...props}
           ref={inputRef}
-          className="w-full h-10 px-3 text-base placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-700 focus:border-primary-700"
+          className="w-full h-10 px-3 text-base text-gray-700 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-700 focus:border-primary-700"
           value={value}
           onChange={handleChange}
           type={type}
