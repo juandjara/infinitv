@@ -24,17 +24,7 @@ export default function UserMenu() {
   ]
 
   if (!user) {
-    return (
-      <div className="flex-1">
-        <Link href="/login">
-          <a>
-            <Button small className="block ml-auto mr-2 mt-2">
-              Entrar
-            </Button>
-          </a>
-        </Link>
-      </div>
-    )
+    return null
   }
 
   return (
