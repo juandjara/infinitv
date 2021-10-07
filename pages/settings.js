@@ -1,20 +1,36 @@
 import MediaServerSettings from '@/components/settings/MediaServerSettings'
 import RadarrSettings from '@/components/settings/RadarrSettings'
 import SonarrSettings from '@/components/settings/SonarrSettings'
+import useSettings from '@/lib/settings/useSettings'
 import { Tab } from '@headlessui/react'
 
 const tabs = [
-  { label: 'Sonarr', component: SonarrSettings },
-  { label: 'Radarr', component: RadarrSettings },
-  { label: 'Media Server', component: MediaServerSettings }
+  { key: 'sonarr', label: 'Sonarr', component: SonarrSettings },
+  { key: 'radarr', label: 'Radarr', component: RadarrSettings },
+  { key: 'mediaServer', label: 'Media Server', component: MediaServerSettings }
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+const defaultSettings = {
+  sonarr: {
+    url: '',
+    apikey: ''
+  },
+  radarr: {
+    url: '',
+    apikey: ''
+  },
+  mediaServer: {
+    url: '',
+    apikey: ''
+  }
+}
+
 export default function Settings() {
-  function onSave() {}
+  const { settings } = useSettings(defaultSettings)
 
   return (
     <main className="flex-auto my-4 container mx-auto px-3">
@@ -22,7 +38,7 @@ export default function Settings() {
         Ajustes
       </h1>
       <Tab.Group>
-        <Tab.List className="flex bg-primary-900 bg-opacity-20 border-opacity-20 border-white border-b-2">
+        <Tab.List className="rounded-t-lg flex bg-white bg-opacity-75 border-opacity-20 border-gray-500 border-b-2">
           {tabs.map(tab => (
             <Tab
               key={tab.label}
@@ -33,7 +49,7 @@ export default function Settings() {
                   'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-primary-400 ring-white ring-opacity-60',
                   selected
                     ? 'shadow text-primary-500 border-primary-500 border-b-2'
-                    : 'text-white hover:bg-white hover:bg-opacity-20'
+                    : 'text-gray-700 hover:bg-white hover:bg-opacity-20'
                 )
               }>
               {tab.label}
@@ -42,8 +58,8 @@ export default function Settings() {
         </Tab.List>
         <Tab.Panels>
           {tabs.map(tab => (
-            <Tab.Panel key={tab.label} className={classNames('bg-primary-900 bg-opacity-20')}>
-              {<tab.component onSave={onSave} />}
+            <Tab.Panel key={tab.label} className={classNames('bg-white bg-opacity-75 rounded-b-lg')}>
+              {<tab.component settingsKey={tab.key} settings={settings} />}
             </Tab.Panel>
           ))}
         </Tab.Panels>

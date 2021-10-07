@@ -1,19 +1,24 @@
-import { useState } from 'react'
-import Button from '../common/Button'
-import Label from '../common/Label'
-import PasswordInput from '../password/PasswordInput'
-
-const defaultSettings = {
-  address: '',
-  apikey: ''
-}
+import { useEffect, useState } from 'react'
+import { mutate } from 'swr'
+import updateSettings from '@/lib/settings/updateSettings'
+import { useAlert } from '@/components/alert/AlertContext'
+import Button from '@/components/common/Button'
+import Label from '@/components/common/Label'
+import PasswordInput from '@/components/password/PasswordInput'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function RadarrSettings() {
-  const [form, setForm] = useState(defaultSettings)
+export default function RadarrSettings({ settings, settingsKey }) {
+  const sectionSettings = settings[settingsKey]
+  const [form, setForm] = useState(sectionSettings)
+  const [loading, setLoading] = useState(false)
+  const { setAlert } = useAlert()
+
+  useEffect(() => {
+    setForm(sectionSettings)
+  }, [sectionSettings])
 
   function update(key, value) {
     setForm(form => ({ ...form, [key]: value }))
@@ -21,11 +26,26 @@ export default function RadarrSettings() {
 
   async function handleSubmit(ev) {
     ev.preventDefault()
+    setLoading(true)
+    try {
+      await mutate('settings', async settings => {
+        const newSettings = {
+          ...settings,
+          [settingsKey]: form
+        }
+        await updateSettings(newSettings)
+        return newSettings
+      })
+    } catch (err) {
+      console.error(err)
+      setAlert(err.message)
+    }
+    setLoading(false)
   }
 
   async function tryConnection() {
     try {
-      const url = `${form.address}/api/system/status?apikey=${form.apikey}`
+      const url = `${form.url}/api/system/status?apikey=${form.apikey}`
       const res = await fetch(url)
       if (res.ok) {
         const status = await res.json()
@@ -41,25 +61,25 @@ export default function RadarrSettings() {
     }
   }
 
-  const formReady = !!(form.address && form.apikey)
+  const formReady = !loading && !!(form.url && form.apikey)
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl leading-8 font-bold mb-8">Ajustes de Radarr</h2>
+      <h2 className="text-2xl text-gray-700 leading-8 font-bold mb-8">Ajustes de Radarr</h2>
       <form onSubmit={handleSubmit}>
         <div className="flex items-center space-x-6">
           <div className="max-w-md flex-1">
-            <Label name="address" text="URL completa" />
+            <Label name="url" text="URL completa" />
             <input
-              id="address"
+              id="url"
               type="url"
               className={classNames(
                 'w-full h-10 px-3 text-base text-gray-700 placeholder-gray-500 border border-gray-300 rounded-md',
                 'focus:outline-none focus:ring-1 focus:ring-primary-700 focus:border-primary-700'
               )}
               placeholder="https://"
-              value={form?.address || ''}
-              onChange={ev => update('address', ev.target.value)}
+              value={form?.url || ''}
+              onChange={ev => update('url', ev.target.value)}
               required
             />
           </div>
