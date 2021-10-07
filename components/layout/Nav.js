@@ -54,9 +54,7 @@ export default function Nav() {
         <Menu>
           {({ open }) => (
             <>
-              <Menu.Button
-                ref={menuToggleRef}
-                className={`relative m-2 w-10 h-10 rounded-lg ${buttonFocusStyle}`}>
+              <Menu.Button ref={menuToggleRef} className={`relative m-2 w-10 h-10 rounded-lg ${buttonFocusStyle}`}>
                 <span className="sr-only">Mobile nav menu</span>
                 <TransitionMenuIcon as={CloseIcon} show={open} />
                 <TransitionMenuIcon as={MenuIcon} show={!open} />

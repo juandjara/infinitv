@@ -19,7 +19,7 @@ export default function UserMenu() {
   }
 
   const menuItems = [
-    { label: 'Mi cuenta', href: '/settings' },
+    { label: 'Mi cuenta', href: '/users/edit' },
     { label: 'Cerrar sesión', href: '/', onClick: handleLogout }
   ]
 
