@@ -55,7 +55,7 @@ export default function Login() {
     } else {
       if (!password) {
         return router.push({
-          pathname: 'mailSent',
+          pathname: 'login/mailSent',
           query: {
             action: 'login',
             to: email.split('@')[1]
@@ -103,7 +103,7 @@ export default function Login() {
           <div className="my-8">
             <div className="flex justify-between items-end mb-1">
               <Label margin="mb-0" name="password" text="Contraseña" />
-              <Link href="/recovery?form=email" className="text-sm text-blue-500">
+              <Link href="/login/recovery?form=email" className="text-sm text-blue-500">
                 <a className="text-sm text-blue-500">Olvid&eacute; mi contraseña</a>
               </Link>
             </div>
@@ -144,7 +144,7 @@ export default function Login() {
             <span role="img" aria-label="dedo apuntando">
               👉
             </span>
-            <Link href="/signup">
+            <Link href="/login/signup">
               <a className="text-blue-500">Crear cuenta</a>
             </Link>
           </p>

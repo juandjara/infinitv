@@ -36,7 +36,7 @@ function EmailForm({ header, className, style }) {
       setAlert(translateErrorMessage(error.message))
     } else {
       return router.push({
-        pathname: 'mailSent',
+        pathname: 'login/mailSent',
         query: {
           action: 'recovery',
           to: email.split('@')[1]
