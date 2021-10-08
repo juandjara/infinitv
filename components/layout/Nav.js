@@ -19,9 +19,9 @@ function TransitionMenuIcon({ as: Component, show }) {
 
 const links = [
   { href: '/player', text: 'Reproductor' },
-  { href: '/posts', text: 'Series' },
-  { href: '/catalog', text: 'Peliculas' },
-  { href: '/sections', text: 'Descargas' },
+  { href: '/tv', text: 'Series' },
+  { href: '/movies', text: 'Peliculas' },
+  { href: '/downloads', text: 'Descargas' },
   { role: 'superadmin', href: '/users', text: 'Usuarios' }
 ]
 
@@ -69,7 +69,7 @@ export default function Nav() {
                 leaveTo="scale-y-50 opacity-0">
                 <Menu.Items
                   static
-                  className={`absolute flex flex-col left-2 w-48 p-2 rounded-md shadow-lg py-1 bg-primary-900 bg-opacity-75`}>
+                  className={`absolute flex flex-col left-2 w-48 p-2 rounded-md shadow-lg bg-primary-900 bg-opacity-75`}>
                   {filteredLinks.map(l => (
                     <Menu.Item key={l.href}>
                       {({ active }) => (

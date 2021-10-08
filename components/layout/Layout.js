@@ -31,9 +31,9 @@ export default function Layout({ children }) {
             </a>
           </Link>
           <Nav />
-          <NavLink href="/settings" className="flex items-center space-x-2 w-full">
+          <NavLink href="/settings" className="flex items-center space-x-2 md:w-full pr-0 mr-0 mt-4">
             <SettingsIcon className="w-10 h-10" />
-            <p>Ajustes</p>
+            <p className="hidden md:block">Ajustes</p>
           </NavLink>
           <UserMenu />
         </nav>

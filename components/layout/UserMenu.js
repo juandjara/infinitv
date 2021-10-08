@@ -28,7 +28,7 @@ export default function UserMenu() {
   }
 
   return (
-    <div className="z-20 relative md:w-full">
+    <div className="z-20 relative md:w-full flex-shrink-0">
       <Menu>
         {({ open }) => (
           <>

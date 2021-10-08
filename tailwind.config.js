@@ -12,7 +12,7 @@ module.exports = {
     },
     extend: {
       gridTemplateColumns: {
-        cards: 'repeat(auto-fill, minmax(20rem, 1fr))'
+        cards: 'repeat(auto-fill, minmax(16rem, 1fr))'
       }
     }
   },
