@@ -23,5 +23,8 @@ module.exports = {
       height: ['group-hover']
     }
   },
-  plugins: [require('@tailwindcss/forms')]
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp')
+  ]
 }
