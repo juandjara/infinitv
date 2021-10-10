@@ -18,12 +18,12 @@ export default function Settings() {
   const { settings } = useSettings()
 
   return (
-    <main className="flex-auto my-4 container mx-auto px-3">
-      <h1 className="mt-4 mb-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
+    <main className="flex-auto my-4 max-w-screen-md mx-auto px-3">
+      <h1 className="mb-4 mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
         Ajustes
       </h1>
       <Tab.Group>
-        <Tab.List className="rounded-t-lg flex bg-white bg-opacity-75 border-opacity-20 border-gray-500 border-b-2">
+        <Tab.List className="rounded-t-lg flex bg-white border-opacity-20 border-gray-500 border-b-2">
           {tabs.map(tab => (
             <Tab
               key={tab.label}
@@ -43,7 +43,7 @@ export default function Settings() {
         </Tab.List>
         <Tab.Panels>
           {tabs.map(tab => (
-            <Tab.Panel key={tab.label} className={classNames('bg-white bg-opacity-75 rounded-b-lg')}>
+            <Tab.Panel key={tab.label} className={classNames('bg-white rounded-b-lg')}>
               {<tab.component settingsKey={tab.key} settings={settings} />}
             </Tab.Panel>
           ))}

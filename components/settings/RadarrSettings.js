@@ -64,55 +64,52 @@ export default function RadarrSettings({ settings, settingsKey }) {
   const formReady = !loading && !!(form.url && form.apikey)
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl text-gray-700 leading-8 font-bold mb-8">Ajustes de Radarr</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="flex items-center space-x-6">
-          <div className="max-w-md flex-1">
-            <Label name="url" text="URL completa" />
-            <input
-              id="url"
-              type="url"
-              className={classNames(
-                'w-full h-10 px-3 text-base text-gray-700 placeholder-gray-500 border border-gray-300 rounded-md',
-                'focus:outline-none focus:ring-1 focus:ring-primary-700 focus:border-primary-700'
-              )}
-              placeholder="https://"
-              value={form?.url || ''}
-              onChange={ev => update('url', ev.target.value)}
-              required
-            />
-          </div>
-          <div className="max-w-md flex-1">
-            <Label name="apikey" text="API Key" />
-            <PasswordInput
-              id="apikey"
-              placeholder="****"
-              showMeter={false}
-              value={form?.apikey || ''}
-              onChange={ev => update('apikey', ev)}
-              required
-            />
-          </div>
+    <form className="p-6 pt-8" onSubmit={handleSubmit}>
+      <div className="flex items-center space-x-6">
+        <div className="max-w-md flex-1">
+          <Label name="url" text="URL completa" />
+          <input
+            id="url"
+            type="url"
+            className={classNames(
+              'w-full h-10 px-3 text-base text-gray-700 placeholder-gray-500 border border-gray-300 rounded-md',
+              'focus:outline-none focus:ring-1 focus:ring-primary-700 focus:border-primary-700'
+            )}
+            placeholder="https://"
+            value={form?.url || ''}
+            onChange={ev => update('url', ev.target.value)}
+            required
+          />
         </div>
-        <div className="flex space-x-4 mt-6">
-          <Button
-            disabled={!formReady}
-            border="border-none"
-            background="bg-primary-500 hover:bg-primary-600"
-            color="text-white">
-            Guardar
-          </Button>
-          <Button
-            onClick={tryConnection}
-            disabled={!formReady}
-            border="border-none"
-            background="bg-green-500 hover:bg-green-600"
-            color="text-white">
-            Probar conexión
-          </Button>
+        <div className="max-w-md flex-1">
+          <Label name="apikey" text="API Key" />
+          <PasswordInput
+            id="apikey"
+            placeholder="****"
+            showMeter={false}
+            value={form?.apikey || ''}
+            onChange={ev => update('apikey', ev)}
+            required
+          />
         </div>
-      </form>
-    </div>
+      </div>
+      <div className="flex space-x-4 mt-6">
+        <Button
+          disabled={!formReady}
+          border="border-none"
+          background="bg-primary-500 hover:bg-primary-600"
+          color="text-white">
+          Guardar
+        </Button>
+        <Button
+          onClick={tryConnection}
+          disabled={!formReady}
+          border="border-none"
+          background="bg-green-500 hover:bg-green-600"
+          color="text-white">
+          Probar conexión
+        </Button>
+      </div>
+    </form>
   )
 }
