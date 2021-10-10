@@ -14,23 +14,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const defaultSettings = {
-  sonarr: {
-    url: '',
-    apikey: ''
-  },
-  radarr: {
-    url: '',
-    apikey: ''
-  },
-  mediaServer: {
-    url: '',
-    apikey: ''
-  }
-}
-
 export default function Settings() {
-  const { settings } = useSettings(defaultSettings)
+  const { settings } = useSettings()
 
   return (
     <main className="flex-auto my-4 container mx-auto px-3">
