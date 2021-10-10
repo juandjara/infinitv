@@ -48,7 +48,12 @@ export default function CredentialsEdit() {
     setError(false)
     setLoading(true)
     try {
-      const session = await verifyCredentials(user.email, currentPassword)
+      let session
+      if (user.has_password) {
+        session = await verifyCredentials(user.email, currentPassword)
+      } else {
+        session = supabase.auth.session()
+      }
       await updateCredentials(session, newPassword)
       setAlert({ type: 'success', text: 'Credenciales actualizadas correctamente' })
     } catch (error) {
@@ -93,18 +98,20 @@ export default function CredentialsEdit() {
           />
         </div>
         <div className="md:flex md:items-start md:space-x-2 space-y-4">
-          <div className="w-full mt-4">
-            <Label name="current_password" text="Contraseña actual" />
-            <PasswordInput
-              id="current_password"
-              autoComplete="current-password"
-              placeholder="****"
-              showMeter={false}
-              value={currentPassword}
-              onChange={setCurrentPassword}
-              required
-            />
-          </div>
+          {user?.has_password && (
+            <div className="w-full mt-4">
+              <Label name="current_password" text="Contraseña actual" />
+              <PasswordInput
+                id="current_password"
+                autoComplete="current-password"
+                placeholder="****"
+                showMeter={false}
+                value={currentPassword}
+                onChange={setCurrentPassword}
+                required
+              />
+            </div>
+          )}
           <div className="w-full">
             <Label name="new_password" text="Contraseña nueva" />
             <PasswordInput

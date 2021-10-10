@@ -30,12 +30,13 @@ CREATE POLICY 'Setup profile policies' ON public.profiles
 CREATE OR REPLACE function public.handle_new_user() 
 returns trigger as $$
 begin
-  insert into public.profiles (id, email, name, role)
+  insert into public.profiles (id, email, name, role, has_password)
   values (
     NEW.id,
     md5(NEW.email),
     (regexp_split_to_array(NEW.email, '@'))[1],
-    NEW.role
+    NEW.role,
+    nullif(NEW.encrypted_password, '') is not null
   )
   on CONFLICT do NOTHING;
   return NEW;
@@ -56,7 +57,8 @@ BEGIN
   update public.profiles 
   set last_sign_in_at = NEW.last_sign_in_at,
       email = md5(NEW.email),
-      role = NEW.role
+      role = NEW.role,
+      has_password = nullif(NEW.encrypted_password, '') is not null
   where id = NEW.id;
   return NEW;
 END;
@@ -82,7 +84,6 @@ DROP TRIGGER IF EXISTS on_auth_user_deleted ON auth.users;
 CREATE TRIGGER on_auth_user_deleted
   BEFORE DELETE ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_delete_user();
-
 
 --------------------------
 -- Auth Functions
