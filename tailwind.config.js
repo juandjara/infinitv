@@ -4,13 +4,10 @@ module.exports = {
   // purge: ['./pages/**/*.js', './components/**/*.js'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    colors: {
-      ...colors,
-      transparent: 'transparent',
-      current: 'currentColor',
-      primary: colors.amber
-    },
     extend: {
+      colors: {
+        primary: colors.amber
+      },
       gridTemplateColumns: {
         cards: 'repeat(auto-fill, minmax(16rem, 1fr))'
       }

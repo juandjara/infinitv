@@ -50,7 +50,7 @@ export default function Nav() {
           </NavLink>
         ))}
       </div>
-      <div className="w-full md:hidden flex-1 z-20 relative">
+      <div className="w-full my-1 md:hidden flex-1 z-20 relative">
         <Menu>
           {({ open }) => (
             <>

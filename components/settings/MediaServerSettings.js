@@ -64,7 +64,7 @@ export default function MediaServerSettings({ settings, settingsKey }) {
   const formReady = !loading && !!(form.url && form.apikey)
 
   return (
-    <form className="p-6 pt-8" onSubmit={handleSubmit}>
+    <form className="p-4 pt-8" onSubmit={handleSubmit}>
       <div className="flex items-center space-x-6">
         <div className="max-w-md flex-1">
           <Label name="url" text="URL completa" />
