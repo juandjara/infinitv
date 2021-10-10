@@ -5,8 +5,15 @@ import UserMenu from './UserMenu'
 import { CogIcon as SettingsIcon } from '@heroicons/react/solid'
 import NavLink from '@/components/common/NavLink'
 import config from '@/lib/config'
+import useRoleCheck from '@/lib/auth/useRoleCheck'
+import useAuthGuard from '@/lib/auth/useAuthGuard'
+import { useRouter } from 'next/router'
 
 export default function Layout({ children }) {
+  const isAdmin = useRoleCheck('superadmin')
+  const router = useRouter()
+  useAuthGuard(/^\/login/.test(router.pathname) === false)
+
   return (
     <div className="relative flex flex-col text-white h-screen font-sans">
       <Head>
@@ -28,10 +35,14 @@ export default function Layout({ children }) {
             </a>
           </Link>
           <Nav />
-          <NavLink href="/settings" className="flex items-center space-x-2 md:w-full pr-0 mr-0 mt-4">
-            <SettingsIcon className="w-10 h-10" />
-            <p className="hidden md:block">Ajustes</p>
-          </NavLink>
+          {isAdmin && (
+            <NavLink
+              href="/settings"
+              className="flex items-center space-x-2 md:w-full pr-0 mr-0 mt-4">
+              <SettingsIcon className="w-10 h-10" />
+              <p className="hidden md:block">Ajustes</p>
+            </NavLink>
+          )}
           <UserMenu />
         </nav>
         {children}
