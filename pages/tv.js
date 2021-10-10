@@ -15,31 +15,29 @@ export default function TV() {
   }, [genres])
 
   return (
-    <div className="h-screen overflow-y-auto flex-auto">
-      <main className="my-4 container mx-auto px-3">
-        <h1 className="mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
-          Series
-        </h1>
-        <div className="relative mt-2 mb-6">
-          <SearchIcon
-            className="w-5 h-5 absolute top-1/2 left-4 text-gray-400"
-            style={{ transform: 'translateY(-50%)' }}
-          />
-          <input
-            type="search"
-            placeholder="Buscar en la lista"
-            className="w-full text-xl rounded-xl pl-12 pr-6 py-4 bg-white text-gray-700 placeholder-gray-500 placeholder-opacity-50"
-          />
-        </div>
-        <ul className="grid grid-cols-cards gap-x-4 gap-y-4">
-          {data.map(d => (
-            <li key={d.id}>
-              <VideoCard item={d} genres={genres} />
-            </li>
-          ))}
-        </ul>
-      </main>
-    </div>
+    <main className="my-4 container mx-auto px-3">
+      <h1 className="mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
+        Series
+      </h1>
+      <div className="relative mt-2 mb-6">
+        <SearchIcon
+          className="w-5 h-5 absolute top-1/2 left-4 text-gray-400"
+          style={{ transform: 'translateY(-50%)' }}
+        />
+        <input
+          type="search"
+          placeholder="Buscar en la lista"
+          className="w-full text-xl rounded-xl pl-12 pr-6 py-4 bg-white text-gray-700 placeholder-gray-500 placeholder-opacity-50"
+        />
+      </div>
+      <ul className="grid grid-cols-cards gap-x-4 gap-y-4">
+        {data.map(d => (
+          <li key={d.id}>
+            <VideoCard item={d} genres={genres} />
+          </li>
+        ))}
+      </ul>
+    </main>
   )
 }
 
@@ -74,7 +72,7 @@ function VideoCard({ item, genres }) {
         <p className="text-lg font-medium">{new Date(item.first_air_date).getFullYear()}</p>
         <p className="line-clamp-1">{getGenreNames(item.genre_ids).join(', ')}</p>
         <p className="text-2xl font-bold text-primary-100">{item.name}</p>
-        <p className="mt-1 line-clamp-4">{item.overview}</p>
+        <p className="mt-2 line-clamp-4">{item.overview}</p>
       </div>
     </div>
   )
