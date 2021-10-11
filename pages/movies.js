@@ -49,10 +49,10 @@ function VideoCard({ item, genres }) {
 
   return (
     <div
-      className="transition-transform transform-gpu scale-100 hover:scale-105 group relative border border-gray-300 rounded-xl"
+      className="h-full transition-transform transform-gpu scale-100 hover:scale-105 group relative border border-gray-300 rounded-xl"
       style={{ minHeight: 240 }}
       onClick={checkSonarr}>
-      <div className="w-full">
+      <div className="w-full h-full">
         <img
           alt={item.name}
           src={`${tmdbImageURL}/w300/${item.poster_path}`}
@@ -61,7 +61,7 @@ function VideoCard({ item, genres }) {
       </div>
       <div className="opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end absolute inset-0 w-full p-3 bg-gray-600 bg-opacity-60 rounded-xl">
         <p className="text-lg font-medium">
-          {item.first_air_date && new Date(item.first_air_date).getFullYear()}
+          {item.release_date && new Date(item.release_date).getFullYear()}
         </p>
         <p className="line-clamp-1">{getGenreNames(item.genre_ids).join(', ')}</p>
         <p className="text-2xl font-bold text-primary-100">{item.title}</p>

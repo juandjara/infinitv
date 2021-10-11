@@ -49,10 +49,10 @@ function VideoCard({ item, genres }) {
 
   return (
     <div
-      className="transition-transform transform-gpu scale-100 hover:scale-105 group relative border border-gray-300 rounded-xl"
+      className="h-full transition-transform transform-gpu scale-100 hover:scale-105 group relative border border-gray-300 rounded-xl"
       style={{ minHeight: 240 }}
       onClick={checkSonarr}>
-      <div className="w-full">
+      <div className="h-full w-full">
         <img
           alt={item.name}
           src={`${tmdbImageURL}/w300/${item.poster_path}`}
