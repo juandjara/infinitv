@@ -1,25 +1,25 @@
 import config from '@/lib/config'
-import useTVSeries from '@/lib/tv/useTVSeries'
-import useTVGenres from '@/lib/tv/useTVGenres'
+import useMovies from '@/lib/movies/useMovies'
+import useMovieGenres from '@/lib/movies/useMovieGenres'
 import { useQueryParams } from '@/lib/useQueryParams'
 import SearchBox from '@/components/common/SearchBox'
-import TVFiltersPanel from '@/components/filters/TVFiltersPanel'
+import MoviesFiltersPanel from '@/components/filters/MoviesFilterPanel'
 
 const tmdbImageURL = config.tmdbImageUrl
 
-export default function TV() {
+export default function Movies() {
   const { query } = useQueryParams()
-  const { data } = useTVSeries(query)
-  const { genres } = useTVGenres()
+  const { data } = useMovies(query)
+  const { genres } = useMovieGenres()
 
   return (
     <main className="my-4 container mx-auto px-3">
       <header className="mt-16 mb-2 flex">
         <h1 className="flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
-          Series
+          Películas
         </h1>
-        <SearchBox route="/tv" />
-        <TVFiltersPanel />
+        <SearchBox route="/movies" />
+        <MoviesFiltersPanel />
       </header>
       <ul className="grid grid-cols-cards gap-x-4 gap-y-4">
         {data.map(d => (
@@ -64,7 +64,7 @@ function VideoCard({ item, genres }) {
           {item.first_air_date && new Date(item.first_air_date).getFullYear()}
         </p>
         <p className="line-clamp-1">{getGenreNames(item.genre_ids).join(', ')}</p>
-        <p className="text-2xl font-bold text-primary-100">{item.name}</p>
+        <p className="text-2xl font-bold text-primary-100">{item.title}</p>
         <p className="mt-2 line-clamp-4">{item.overview}</p>
       </div>
     </div>

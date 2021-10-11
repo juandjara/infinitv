@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Button from '@/components/common/Button'
 import { AdjustmentsIcon as FilterIcon, ArrowLeftIcon as BackIcon } from '@heroicons/react/solid'
 import Select from '@/components/common/Select'
-import useTVGenres from '@/lib/useTVGenres'
+import useTVGenres from '@/lib/tv/useTVGenres'
 import networks from '@/lib/config/networks'
 import studios from '@/lib/config/studios'
 

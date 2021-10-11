@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Tag from '@/components/common/Tag'
 import Pagination from '@/components/common/Pagination'
 import SearchBox from '@/components/common/SearchBox'
-import UserFiltersPanel from '@/components/users/UserFilterPanel'
+import UserFiltersPanel from '@/components/filters/UserFilterPanel'
 import UserListItem from '@/components/users/UserListItem'
 
 export default function UserList({ showAccessColumn = true }) {
