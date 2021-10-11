@@ -6,7 +6,6 @@ import { AdjustmentsIcon as FilterIcon, ArrowLeftIcon as BackIcon } from '@heroi
 import Select from '@/components/common/Select'
 import useTVGenres from '@/lib/tv/useTVGenres'
 import networks from '@/lib/config/networks'
-import studios from '@/lib/config/studios'
 
 const SORT_OPTIONS = [
   { label: 'Popularidad', value: null },
@@ -24,8 +23,7 @@ function initialFilterState(params) {
     sortKey: params.sk || SORT_OPTIONS[0].value,
     sortType: params.st || SORT_TYPES[0].value,
     genre: params.g,
-    network: params.n,
-    company: params.c
+    network: params.n
   }
 }
 
@@ -35,19 +33,16 @@ export default function TVFiltersPanel() {
   const { genres } = useTVGenres()
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef(null)
-  const hasFilters = Boolean(params.sk || params.st || params.g || params.n || params.c)
+  const hasFilters = Boolean(params.sk || params.st || params.g || params.n)
 
   const [filters, setFilters] = useState(() => initialFilterState(params))
-  const { genre, network, company, sortKey, sortType } = filters
+  const { genre, network, sortKey, sortType } = filters
 
   const genreOptions = genres.map(g => ({ value: String(g.id), label: g.name }))
   const selectedGenre = genreOptions.find(opt => opt.value === genre)
 
   const networkOptoins = networks.map(n => ({ value: n.id, label: n.name, image: n.image }))
   const selectedNetwork = networkOptoins.find(opt => opt.value === network)
-
-  const companyOptions = studios.map(s => ({ value: s.id, label: s.name, image: s.image }))
-  const selectedCompany = companyOptions.find(opt => opt.value === company)
 
   const selectedSortKey = SORT_OPTIONS.find(opt => opt.value === sortKey)
   const selectedSortType = SORT_TYPES.find(opt => opt.value === sortType)
@@ -99,7 +94,6 @@ export default function TVFiltersPanel() {
     delete query.sk
     delete query.st
     delete query.g
-    delete query.c
     delete query.n
 
     router.push({ pathname: router.pathname, query })
@@ -164,16 +158,6 @@ export default function TVFiltersPanel() {
             options={genreOptions}
             selected={selectedGenre}
             onChange={ev => update('genre', ev.value)}
-          />
-        </section>
-        <section>
-          <Select
-            label="Estudio"
-            noSelectionLabel="Todos"
-            className="w-64"
-            options={companyOptions}
-            selected={selectedCompany}
-            onChange={ev => update('company', ev.value)}
           />
         </section>
         <section>

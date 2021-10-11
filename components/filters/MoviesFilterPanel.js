@@ -161,7 +161,7 @@ export default function MoviesFiltersPanel() {
         </section>
         <section>
           <Select
-            label="Estudio"
+            label="Compañía cinematográfica"
             noSelectionLabel="Todos"
             className="w-64"
             options={companyOptions}
