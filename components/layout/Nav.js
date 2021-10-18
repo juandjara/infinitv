@@ -18,7 +18,7 @@ function TransitionMenuIcon({ as: Component, show }) {
 }
 
 const links = [
-  { href: '/player', text: 'Reproductor' },
+  { href: '/calendar', text: 'Calendario' },
   { href: '/tv', text: 'Series' },
   { href: '/movies', text: 'Peliculas' },
   { href: '/downloads', text: 'Descargas' },
