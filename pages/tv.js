@@ -4,13 +4,28 @@ import useTVGenres from '@/lib/tv/useTVGenres'
 import { useQueryParams } from '@/lib/useQueryParams'
 import SearchBox from '@/components/common/SearchBox'
 import TVFiltersPanel from '@/components/filters/TVFiltersPanel'
+import { useRouter } from 'next/router'
+import Button from '@/components/common/Button'
 
 const tmdbImageURL = config.tmdbImageUrl
 
 export default function TV() {
-  const { query } = useQueryParams()
-  const { data } = useTVSeries(query)
+  const router = useRouter()
+  const { params } = useQueryParams()
   const { genres } = useTVGenres()
+  const page = Number(params.page || 1)
+
+  function handlePageChange(page) {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page }
+    })
+  }
+
+  const pages = []
+  for (let i = 1; i < page; i++) {
+    pages.push(<VideoPage genres={genres} page={i} key={i} />)
+  }
 
   return (
     <main className="my-4 container mx-auto px-3">
@@ -21,15 +36,22 @@ export default function TV() {
         <SearchBox route="/tv" />
         <TVFiltersPanel />
       </header>
-      <ul className="grid grid-cols-cards gap-x-4 gap-y-4">
-        {data.map(d => (
-          <li key={d.id}>
-            <VideoCard item={d} genres={genres} />
-          </li>
-        ))}
-      </ul>
+      <ul className="grid grid-cols-cards gap-x-4 gap-y-4">{pages}</ul>
+      <Button className="block mx-auto my-6" onClick={() => handlePageChange(page + 1)}>Cargar más</Button>
     </main>
   )
+}
+
+function VideoPage({ page, genres }) {
+  const { params } = useQueryParams()
+  const query = new URLSearchParams({ ...params, page }).toString()
+  const { data } = useTVSeries(query)
+
+  return data.map(d => (
+    <li key={d.id}>
+      <VideoCard item={d} genres={genres} />
+    </li>
+  ))
 }
 
 function VideoCard({ item, genres }) {
@@ -37,21 +59,20 @@ function VideoCard({ item, genres }) {
     return genres.filter(g => ids.indexOf(g.id) !== -1).map(g => g.name)
   }
 
-  async function checkSonarr() {
-    const res = await fetch('/api/sonarr/series')
-    if (res.ok) {
-      const json = await res.json()
-      console.log(json)
-    } else {
-      console.error(`Request failed with status code ${res.status}`)
-    }
-  }
+  // async function checkSonarr() {
+  //   const res = await fetch('/api/sonarr/series')
+  //   if (res.ok) {
+  //     const json = await res.json()
+  //     console.log(json)
+  //   } else {
+  //     console.error(`Request failed with status code ${res.status}`)
+  //   }
+  // }
 
   return (
     <div
       className="h-full transition-transform transform-gpu scale-100 hover:scale-105 group relative border border-gray-300 rounded-xl"
-      style={{ minHeight: 240 }}
-      onClick={checkSonarr}>
+      style={{ minHeight: 240 }}>
       <div className="h-full w-full">
         <img
           alt={item.name}

@@ -82,7 +82,6 @@ export default function TVFiltersPanel() {
         sk: sortKey,
         st: sortType,
         g: genre,
-        c: company,
         n: network
       }
     })
