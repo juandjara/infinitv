@@ -23,7 +23,7 @@ export default function TV() {
   }
 
   const pages = []
-  for (let i = 1; i < page; i++) {
+  for (let i = 1; i <= page; i++) {
     pages.push(<VideoPage genres={genres} page={i} key={i} />)
   }
 
@@ -45,13 +45,29 @@ export default function TV() {
 function VideoPage({ page, genres }) {
   const { params } = useQueryParams()
   const query = new URLSearchParams({ ...params, page }).toString()
-  const { data } = useTVSeries(query)
+  const { data, loading } = useTVSeries(query)
+
+  if (loading) {
+    return (
+      <>
+        <SkeletonVideoCard />
+        <SkeletonVideoCard />
+        <SkeletonVideoCard />
+      </>
+    )
+  }
 
   return data.map(d => (
     <li key={d.id}>
       <VideoCard item={d} genres={genres} />
     </li>
   ))
+}
+
+function SkeletonVideoCard() {
+  return (
+    <div className="border border-gray-300 bg-gray-200 rounded-xl" style={{ height: 430 }}></div>
+  )
 }
 
 function VideoCard({ item, genres }) {
@@ -71,7 +87,7 @@ function VideoCard({ item, genres }) {
 
   return (
     <div
-      className="h-full transition-transform transform-gpu scale-100 hover:scale-105 group relative border border-gray-300 rounded-xl"
+      className="h-full border border-gray-300 rounded-xl transition-transform transform-gpu scale-100 hover:scale-105 group relative"
       style={{ minHeight: 240 }}>
       <div className="h-full w-full">
         <img
