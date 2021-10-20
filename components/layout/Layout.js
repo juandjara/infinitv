@@ -45,7 +45,7 @@ export default function Layout({ children }) {
           )}
           <UserMenu />
         </nav>
-        <div className="h-screen overflow-y-auto flex-auto pb-4">{children}</div>
+        <div className="md:h-screen overflow-y-auto flex-auto pb-4">{children}</div>
       </div>
     </div>
   )

@@ -34,7 +34,7 @@ export default function UserMenu() {
           <>
             <Menu.Button
               title="Open user menu"
-              className={`w-full flex items-center p-2 px-3 md:px-4 md:mt-2 hover:bg-gray-700 hover:bg-opacity-25`}>
+              className={`w-full flex items-center p-2 px-3 md:px-4 md:mt-2 hover:bg-blue-500 hover:bg-opacity-50`}>
               <span className="sr-only">Open user menu</span>
               <Avatar user={user} size={44} border="border-white" />
               <p className="hidden md:block ml-4">{user.name}</p>
@@ -49,7 +49,7 @@ export default function UserMenu() {
               leaveTo="scale-y-50 opacity-0">
               <Menu.Items
                 static
-                className="absolute right-2 md:right-0 md:left-2 md:bottom-16 w-48 rounded-md shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5">
+                className="absolute right-2 md:right-0 md:left-2 md:bottom-20 w-48 rounded-md shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5">
                 <div className="mb-2 pt-1 pb-3 px-4 text-gray-900 border-b border-1 border-gray-300">
                   <p className="mb-1 text-sm font-semibold truncate">{user.name}</p>
                   <p className="space-x-1 font-semibold">

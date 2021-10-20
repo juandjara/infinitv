@@ -18,8 +18,8 @@ export default function Settings() {
   const { settings } = useSettings()
 
   return (
-    <main className="flex-auto my-4 max-w-screen-md mx-auto px-3">
-      <h1 className="mb-4 mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
+    <main className="flex-auto my-4 container mx-auto px-3">
+      <h1 className="mb-4 mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
         Ajustes
       </h1>
       <Tab.Group>

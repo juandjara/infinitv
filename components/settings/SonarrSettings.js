@@ -93,7 +93,7 @@ export default function SonarrSettings({ settings, settingsKey }) {
           />
         </div>
       </div>
-      <div className="flex space-x-4 mt-6">
+      <div className="flex space-x-4 mt-8">
         <Button
           type="submit"
           disabled={!formReady}

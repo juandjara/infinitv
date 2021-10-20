@@ -31,7 +31,7 @@ export default function TV() {
   return (
     <main className="my-4 container mx-auto px-3">
       <header className="-mx-3 mt-16 mb-2 px-3 py-1 sticky top-0 z-10 flex">
-        <h1 className="flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
+        <h1 className="flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
           Series
         </h1>
         <SearchBox route="/tv" />
@@ -105,7 +105,7 @@ function VideoCard({ item, genres }) {
             {item.first_air_date && new Date(item.first_air_date).getFullYear()}
           </p>
           <p className="line-clamp-1">{getGenreNames(item.genre_ids).join(', ')}</p>
-          <p className="text-2xl font-bold text-primary-100">{item.name}</p>
+          <p className="text-2xl font-bold text-accent-100">{item.name}</p>
           <p className="mt-2 line-clamp-4">{item.overview}</p>
         </div>
       </a>

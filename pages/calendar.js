@@ -52,7 +52,7 @@ export default function Calendar() {
 
   return (
     <main className="text-gray-500 my-4 container mx-auto px-3">
-      <h1 className="mt-16 mb-2 flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
+      <h1 className="mt-16 mb-2 flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
         Calendario
       </h1>
       <div className="p-6 bg-white rounded-xl">

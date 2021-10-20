@@ -27,7 +27,7 @@ export default function UserList({ showAccessColumn = true }) {
 
   return (
     <main className="flex-auto my-4 container mx-auto px-3">
-      <h1 className="mt-4 mb-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-primary-700 to-primary-300">
+      <h1 className="mb-2 mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
         Usuarios
       </h1>
       <div className="relative flex items-end mb-2">

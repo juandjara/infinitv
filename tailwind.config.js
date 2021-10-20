@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: colors.amber
+        primary: colors.blue,
+        accent: colors.orange
       },
       gridTemplateColumns: {
         cards: 'repeat(auto-fill, minmax(16rem, 1fr))'

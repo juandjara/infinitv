@@ -117,7 +117,7 @@ export default function SearchBox({ route }) {
         </Button>
         <input type="submit" hidden />
         {recentSearches.length ? (
-          <div className="absolute w-full top-full rounded-md bg-primary-900">
+          <div className="absolute w-full top-full rounded-md bg-primary-900 bg-opacity-90">
             <p className="text-xs text-gray-300 uppercase tracking-wider p-2 pt-3">
               B&uacute;squedas recientes
             </p>
