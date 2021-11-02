@@ -5,13 +5,28 @@ import { useQueryParams } from '@/lib/useQueryParams'
 import SearchBox from '@/components/common/SearchBox'
 import MoviesFiltersPanel from '@/components/filters/MoviesFilterPanel'
 import Link from 'next/link'
+import Button from '@/components/common/Button'
+import { useRouter } from 'next/router'
 
 const tmdbImageURL = config.tmdbImageUrl
 
 export default function Movies() {
-  const { query } = useQueryParams()
-  const { data } = useMovies(query)
+  const router = useRouter()
+  const { params } = useQueryParams()
   const { genres } = useMovieGenres()
+  const page = Number(params.page || 1)
+
+  function handlePageChange(page) {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page }
+    })
+  }
+
+  const pages = []
+  for (let i = 1; i <= page; i++) {
+    pages.push(<VideoPage genres={genres} page={i} key={i} />)
+  }
 
   return (
     <main className="my-4 container mx-auto px-3">
@@ -22,14 +37,39 @@ export default function Movies() {
         <SearchBox route="/movies" />
         <MoviesFiltersPanel />
       </header>
-      <ul className="grid grid-cols-cards gap-x-4 gap-y-4">
-        {data.map(d => (
-          <li key={d.id}>
-            <VideoCard item={d} genres={genres} />
-          </li>
-        ))}
-      </ul>
+      <ul className="grid grid-cols-cards gap-x-4 gap-y-4">{pages}</ul>
+      <Button className="block mx-auto my-6" onClick={() => handlePageChange(page + 1)}>
+        Cargar más
+      </Button>
     </main>
+  )
+}
+
+function VideoPage({ page, genres }) {
+  const { params } = useQueryParams()
+  const query = new URLSearchParams({ ...params, page }).toString()
+  const { data, loading } = useMovies(query)
+
+  if (loading) {
+    return (
+      <>
+        <SkeletonVideoCard />
+        <SkeletonVideoCard />
+        <SkeletonVideoCard />
+      </>
+    )
+  }
+
+  return data.map(d => (
+    <li key={d.id}>
+      <VideoCard item={d} genres={genres} />
+    </li>
+  ))
+}
+
+function SkeletonVideoCard() {
+  return (
+    <div className="border border-gray-300 bg-gray-200 rounded-xl" style={{ height: 430 }}></div>
   )
 }
 
@@ -38,15 +78,15 @@ function VideoCard({ item, genres }) {
     return genres.filter(g => ids.indexOf(g.id) !== -1).map(g => g.name)
   }
 
-  async function checkSonarr() {
-    const res = await fetch('/api/sonarr/series')
-    if (res.ok) {
-      const json = await res.json()
-      console.log(json)
-    } else {
-      console.error(`Request failed with status code ${res.status}`)
-    }
-  }
+  // async function checkSonarr() {
+  //   const res = await fetch('/api/sonarr/series')
+  //   if (res.ok) {
+  //     const json = await res.json()
+  //     console.log(json)
+  //   } else {
+  //     console.error(`Request failed with status code ${res.status}`)
+  //   }
+  // }
 
   return (
     <Link href={`/movies/${item.id}`}>

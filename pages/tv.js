@@ -4,7 +4,7 @@ import useTVGenres from '@/lib/tv/useTVGenres'
 import { useQueryParams } from '@/lib/useQueryParams'
 import SearchBox from '@/components/common/SearchBox'
 import TVFiltersPanel from '@/components/filters/TVFiltersPanel'
-import Button from '@/components/common/Button' 
+import Button from '@/components/common/Button'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
