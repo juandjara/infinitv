@@ -38,9 +38,16 @@ export default function Movies() {
         <MoviesFiltersPanel />
       </header>
       <ul className="grid grid-cols-cards gap-x-4 gap-y-4">{pages}</ul>
-      <Button className="block mx-auto my-6" onClick={() => handlePageChange(page + 1)}>
-        Cargar más
-      </Button>
+      {page > 5 ? (
+        <p className="text-center mx-auto mt-8 py-8 text-xl max-w-prose">
+          ¿No encuentras lo que estás buscando? Prueba a usar el buscador en la esquina superior
+          derecha
+        </p>
+      ) : (
+        <Button className="block mx-auto my-6" onClick={() => handlePageChange(page + 1)}>
+          Cargar más
+        </Button>
+      )}
     </main>
   )
 }

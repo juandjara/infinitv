@@ -31,16 +31,23 @@ export default function TV() {
   return (
     <main className="my-4 container mx-auto px-3">
       <header className="-mx-3 mt-16 mb-2 px-3 py-1 sticky top-0 z-10 flex">
-        <h1 className="flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
+        <h1 className="px-1 flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
           Series
         </h1>
         <SearchBox route="/tv" />
         <TVFiltersPanel />
       </header>
       <ul className="grid grid-cols-cards gap-x-4 gap-y-4">{pages}</ul>
-      <Button className="block mx-auto my-6" onClick={() => handlePageChange(page + 1)}>
-        Cargar más
-      </Button>
+      {page > 5 ? (
+        <p className="text-center mx-auto mt-8 py-8 text-xl max-w-prose">
+          ¿No encuentras lo que estás buscando? Prueba a usar el buscador en la esquina superior
+          derecha
+        </p>
+      ) : (
+        <Button className="block mx-auto my-6" onClick={() => handlePageChange(page + 1)}>
+          Cargar más
+        </Button>
+      )}
     </main>
   )
 }
@@ -97,7 +104,7 @@ function VideoCard({ item, genres }) {
           <img
             alt={item.name}
             src={`${tmdbImageURL}/w300/${item.poster_path}`}
-            className="w-full h-full rounded-xl object-cover"
+            className="bg-gray-300 w-full h-full rounded-xl object-cover"
           />
         </div>
         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end absolute inset-0 w-full p-3 bg-gray-600 bg-opacity-60 rounded-xl">
