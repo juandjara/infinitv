@@ -52,7 +52,7 @@ export default function SignUp() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center flex-auto my-4 px-3">
+    <main className="h-full flex flex-col items-center justify-center flex-auto my-4 px-3">
       <div
         style={{ maxHeight: 'var(--login-card-height)' }}
         className="flex md:h-full justify-between bg-white text-gray-700 rounded-lg">
