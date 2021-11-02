@@ -50,7 +50,8 @@ export default function SearchBox({ route }) {
         pathname: route,
         query: {
           ...router.query,
-          q: search
+          q: search,
+          page: 1
         }
       })
     } else {
@@ -58,7 +59,8 @@ export default function SearchBox({ route }) {
         pathname: route,
         query: {
           ...router.query,
-          q: undefined
+          q: undefined,
+          page: 1
         }
       })
     }
