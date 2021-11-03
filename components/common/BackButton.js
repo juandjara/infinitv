@@ -6,6 +6,7 @@ export default function BackButton({
   icon,
   title = 'Volver',
   colors = 'bg-opacity-20 text-gray-600 bg-gray-200 hover:bg-opacity-50',
+  className = '',
   ...props
 }) {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function BackButton({
       title={title}
       aria-label={title}
       onClick={() => router.back()}
-      className={`rounded-full p-2 ${colors} ${buttonFocusStyle}`}
+      className={`rounded-full p-2 ${colors} ${buttonFocusStyle} ${className}`}
       {...props}>
       {Icon}
     </button>
