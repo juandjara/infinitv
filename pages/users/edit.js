@@ -3,9 +3,11 @@ import CredentialsEdit from '@/components/editUser/CredentialsEdit'
 import RoleEdit from '@/components/editUser/RoleEdit'
 import useProfile from '@/lib/auth/useProfile'
 import BackButton from '@/components/common/BackButton'
+import { useQueryParams } from '@/lib/useQueryParams'
 
 export default function EditUser() {
-  const { user } = useProfile()
+  const { params } = useQueryParams()
+  const { user } = useProfile(params.id)
 
   return (
     <main className="flex-auto mt-20 px-3">
