@@ -2,7 +2,7 @@ import supabase from '@/lib/db-client/supabaseAdmin'
 import axios from 'axios'
 import addMonths from 'date-fns/addMonths'
 
-export default async function sonarrSeries(req, res) {
+export default async function sonarrCalendar(req, res) {
   const { data: settingsRow, error } = await supabase.from('settings').select('settings').single()
 
   if (error) {
