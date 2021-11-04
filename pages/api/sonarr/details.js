@@ -10,13 +10,21 @@ export default async function sonarrSeries(req, res) {
   }
 
   try {
-    const id = req.query.tvdbid
+    const id = Number(req.query.tvdbid)
     const { url, apikey } = settingsRow.settings.sonarr
-    const fullUrl = `${url}/api/series/lookup?term=tvdb:${id}&apikey=${apikey}`
-    console.log(fullUrl)
-    const data = await axios.get(fullUrl).then(res => res.data)
-    res.json(data)
+    const data = await axios.get(`${url}/api/series?apikey=${apikey}`).then(res => res.data)
+    const details = data.find(d => d.tvdbId === id)
+    if (!details) {
+      res.json(null)
+      return
+    }
+
+    const surl = `${url}/api/episode?seriesId=${details.id}&apikey=${apikey}`
+    const episodes = await axios.get(surl).then(res => res.data)
+    details.episodes = episodes
+
+    res.json(details)
   } catch (err) {
-    res.status(500).json({ code: error.code, message: error.message })
+    res.status(500).json({ code: err.code, message: err.message })
   }
 }

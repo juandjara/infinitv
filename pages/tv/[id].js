@@ -5,22 +5,8 @@ import { ChevronDownIcon, ChevronRightIcon, StarIcon } from '@heroicons/react/so
 import Link from 'next/link'
 import BackButton from '@/components/common/BackButton'
 import axios from 'axios'
-import useSWR from 'swr'
 import { Disclosure } from '@headlessui/react'
 import { useEffect, useState } from 'react'
-
-function useSonarrSeries(id) {
-  const { data, error } = useSWR(`sonarr-series/${id}`, key => {
-    const id = key.split('/').pop()
-    return axios.get(`/api/sonarr/details?tvdbid=${id}`).then(res => res.data[0])
-  })
-
-  return {
-    series: data,
-    loading: !error && !data,
-    error
-  }
-}
 
 async function fetchTVSeason(id, season) {
   const tmdbURL = config.tmdbApiUrl
@@ -44,16 +30,11 @@ async function fetchTVSeason(id, season) {
 
 export default function TvDetails() {
   const { params } = useQueryParams()
-  const { data, loading } = useTVDetails(params.id)
-  // const { series } = useSonarrSeries(data && data.external_ids.tvdb_id)
+  const { data, loading, error } = useTVDetails(params.id)
   const watchRegion =
     typeof navigator !== 'undefined' && navigator.language.split('-').pop().toUpperCase()
 
-  // useEffect(() => {
-  //   console.log('tmdb details', data)
-  // }, [data])
-
-  if (loading) {
+  if (loading || error) {
     return null
   }
 
@@ -166,7 +147,6 @@ function SeasonDetails({ id, season }) {
   useEffect(() => {
     async function process() {
       const data = await fetchTVSeason(id, season.season_number)
-      console.log(data)
       setDetails(data)
     }
     process()
@@ -183,7 +163,7 @@ function SeasonDetails({ id, season }) {
       />
       {details && (
         <div className="flex-grow">
-          <p className="max-w-prose mb-4">{details.overview}</p>
+          {details.overview && <p className="max-w-prose mb-4">{details.overview}</p>}
           <ul className="space-y-4">
             {details.episodes.map(e => (
               <Disclosure as="li" key={e.id}>
