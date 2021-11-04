@@ -100,7 +100,7 @@ export default function TvDetails() {
         </div>
       </div>
       <div className="container mx-auto px-3 py-6 flex justify-center space-x-6">
-        <div style={{ width: 342 }} className="space-y-8">
+        <div style={{ width: 342 }} className="space-y-8 flex-shrink-0">
           <Networks networks={data.networks} />
           <WatchProviders watchProviders={data['watch/providers']['results'][watchRegion]} />
           <div>
@@ -112,14 +112,12 @@ export default function TvDetails() {
             </ul>
           </div>
         </div>
-        <div className="flex-grow">
-          <ul className="space-y-8 mt-10">
-            {data.seasons
-              .filter(s => s.season_number > 0)
-              .map(s => (
-                <SeasonCard key={s.id} id={params.id} season={s} />
-              ))}
-          </ul>
+        <div className="flex-grow space-y-8 mt-10">
+          {data.seasons
+            .filter(s => s.season_number > 0)
+            .map(s => (
+              <SeasonCard key={s.id} id={params.id} season={s} />
+            ))}
         </div>
       </div>
     </main>
@@ -128,7 +126,7 @@ export default function TvDetails() {
 
 function SeasonCard({ id, season }) {
   return (
-    <li>
+    <section>
       <Disclosure defaultOpen={season.season_number === 1}>
         {({ open }) => (
           <>
@@ -158,7 +156,7 @@ function SeasonCard({ id, season }) {
           </>
         )}
       </Disclosure>
-    </li>
+    </section>
   )
 }
 
@@ -188,9 +186,36 @@ function SeasonDetails({ id, season }) {
           <p className="max-w-prose mb-4">{details.overview}</p>
           <ul className="space-y-4">
             {details.episodes.map(e => (
-              <li key={e.id} className="bg-white px-4 py-3 rounded-xl">
-                Ep. {e.episode_number} - {e.name}
-              </li>
+              <Disclosure as="li" key={e.id}>
+                {({ open }) => (
+                  <>
+                    <Disclosure.Button className="w-full text-left">
+                      <p
+                        key={e.id}
+                        className={[
+                          open ? 'rounded-t-xl' : 'rounded-xl',
+                          'bg-white px-4 py-3'
+                        ].join(' ')}>
+                        <span>
+                          Ep. {e.episode_number} - {e.name}
+                        </span>
+                        <br />
+                        <span className="text-gray-500 text-sm">
+                          {new Date(e.air_date).toLocaleDateString()}
+                        </span>
+                      </p>
+                    </Disclosure.Button>
+                    <Disclosure.Panel className="bg-white rounded-b-xl p-3 pb-6 flex items-start space-x-4">
+                      <img
+                        alt="still"
+                        className="rounded-xl"
+                        src={`${config.tmdbImageUrl}/w300${e.still_path}`}
+                      />
+                      <p className="max-w-prose">{e.overview}</p>
+                    </Disclosure.Panel>
+                  </>
+                )}
+              </Disclosure>
             ))}
           </ul>
         </div>
