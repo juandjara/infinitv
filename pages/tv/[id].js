@@ -1,11 +1,13 @@
 import config from '@/lib/config'
 import useTVDetails from '@/lib/tv/useTVDetails'
 import { useQueryParams } from '@/lib/useQueryParams'
-import { StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ChevronRightIcon, StarIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import BackButton from '@/components/common/BackButton'
 import axios from 'axios'
 import useSWR from 'swr'
+import { Disclosure } from '@headlessui/react'
+import { useEffect, useState } from 'react'
 
 function useSonarrSeries(id) {
   const { data, error } = useSWR(`sonarr-series/${id}`, key => {
@@ -32,7 +34,7 @@ async function fetchTVSeason(id, season) {
 
   const params = {
     api_key: tmdbApiKey,
-    language: navigator.language,
+    language: navigator.language
     // append_to_response: 'external_ids,watch/providers,aggregate_credits'
   }
 
@@ -115,21 +117,85 @@ export default function TvDetails() {
             {data.seasons
               .filter(s => s.season_number > 0)
               .map(s => (
-                <li key={s.id} className="px-4 py-3 rounded-xl bg-opacity-80 bg-white text-primary-700">
-                  {/* <img alt="poster" src={`${config.tmdbImageUrl}/w342${s.poster_path}`} /> */}
-                  <p>
-                    T{s.season_number}: {s.name}
-                  </p>
-                  <p className="text-gray-500 text-sm">
-                    {s.episode_count} Episodios
-                    {s.air_date && ' - ' + new Date(s.air_date).toLocaleDateString()}
-                  </p>
-                </li>
+                <SeasonCard key={s.id} id={params.id} season={s} />
               ))}
           </ul>
         </div>
       </div>
     </main>
+  )
+}
+
+function SeasonCard({ id, season }) {
+  return (
+    <li>
+      <Disclosure defaultOpen={season.season_number === 1}>
+        {({ open }) => (
+          <>
+            <Disclosure.Button
+              className={[
+                open ? 'rounded-t-xl' : 'rounded-xl',
+                'flex text-left items-center space-x-3 w-full px-4 py-3 bg-opacity-80 bg-white text-primary-700'
+              ].join(' ')}>
+              {open ? (
+                <ChevronDownIcon className="w-6 h-6 text-gray-500" />
+              ) : (
+                <ChevronRightIcon className="w-6 h-6 text-gray-500" />
+              )}
+              <div>
+                <p>
+                  T{season.season_number}: {season.name}
+                </p>
+                <p className="text-gray-500 text-sm">
+                  {season.episode_count} Episodios
+                  {season.air_date && ' - ' + new Date(season.air_date).toLocaleDateString()}
+                </p>
+              </div>
+            </Disclosure.Button>
+            <Disclosure.Panel unmount>
+              <SeasonDetails id={id} season={season} />
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
+    </li>
+  )
+}
+
+function SeasonDetails({ id, season }) {
+  const [details, setDetails] = useState(null)
+
+  useEffect(() => {
+    async function process() {
+      const data = await fetchTVSeason(id, season.season_number)
+      console.log(data)
+      setDetails(data)
+    }
+    process()
+  }, [id, season.season_number])
+
+  return (
+    <div className="flex items-start space-x-4 bg-opacity-80 text-gray-900 bg-white rounded-b-xl p-3">
+      <img
+        alt="poster"
+        className="rounded-xl"
+        width="240"
+        height="240"
+        src={`${config.tmdbImageUrl}/w342${season.poster_path}`}
+      />
+      {details && (
+        <div className="flex-grow">
+          <p className="max-w-prose mb-4">{details.overview}</p>
+          <ul className="space-y-4">
+            {details.episodes.map(e => (
+              <li key={e.id} className="bg-white px-4 py-3 rounded-xl">
+                Ep. {e.episode_number} - {e.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   )
 }
 
