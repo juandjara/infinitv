@@ -1,7 +1,7 @@
 import config from '@/lib/config'
 import useTVDetails from '@/lib/tv/useTVDetails'
 import { useQueryParams } from '@/lib/useQueryParams'
-import { ChevronDownIcon, ChevronRightIcon, StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ChevronRightIcon, EyeIcon, EyeOffIcon, StarIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import BackButton from '@/components/common/BackButton'
 import axios from 'axios'
@@ -26,6 +26,33 @@ async function fetchTVSeason(id, season) {
 
   const res = await axios.get(url, { params })
   return res.data
+}
+
+function seasonStatus(sonarrData, seasonNumber) {
+  if (!sonarrData) {
+    return false
+  }
+
+  const season = sonarrData.seasons.find(s => s.seasonNumber === seasonNumber)
+  return season && season.monitored
+}
+
+function episodeStatus(sonarrData, seasonNumber, episodeNumber) {
+  if (!sonarrData) {
+    return false
+  }
+
+  const episode = sonarrData.episodes.find(
+    e => e.seasonNumber === seasonNumber && e.episodeNumber === episodeNumber
+  )
+  return episode && episode.monitored
+}
+
+function useSonarrData() {
+  const { params } = useQueryParams()
+  const { data } = useTVDetails(params.id)
+
+  return data && data.sonarr
 }
 
 export default function TvDetails() {
@@ -105,7 +132,9 @@ export default function TvDetails() {
   )
 }
 
-function SeasonCard({ id, season }) {
+function SeasonCard({ season }) {
+  const sonarr = useSonarrData()
+  const MonitorStatusIcon = seasonStatus(sonarr, season.season_number) ? EyeIcon : EyeOffIcon
   return (
     <section>
       <Disclosure defaultOpen={season.season_number === 1}>
@@ -130,9 +159,13 @@ function SeasonCard({ id, season }) {
                   {season.air_date && ' - ' + new Date(season.air_date).toLocaleDateString()}
                 </p>
               </div>
+              <div className="flex-grow"></div>
+              <div>
+                <MonitorStatusIcon className="text-gray-400 w-6 h-6" />
+              </div>
             </Disclosure.Button>
             <Disclosure.Panel unmount>
-              <SeasonDetails id={id} season={season} />
+              <SeasonDetails season={season} />
             </Disclosure.Panel>
           </>
         )}
@@ -141,16 +174,17 @@ function SeasonCard({ id, season }) {
   )
 }
 
-function SeasonDetails({ id, season }) {
+function SeasonDetails({ season }) {
+  const { params } = useQueryParams()
   const [details, setDetails] = useState(null)
 
   useEffect(() => {
     async function process() {
-      const data = await fetchTVSeason(id, season.season_number)
+      const data = await fetchTVSeason(params.id, season.season_number)
       setDetails(data)
     }
     process()
-  }, [id, season.season_number])
+  }, [params.id, season.season_number])
 
   return (
     <div className="flex items-start space-x-4 bg-opacity-80 text-gray-900 bg-white rounded-b-xl p-3">
@@ -165,42 +199,56 @@ function SeasonDetails({ id, season }) {
         <div className="flex-grow">
           {details.overview && <p className="max-w-prose mb-4">{details.overview}</p>}
           <ul className="space-y-4">
-            {details.episodes.map(e => (
-              <Disclosure as="li" key={e.id}>
-                {({ open }) => (
-                  <>
-                    <Disclosure.Button className="w-full text-left">
-                      <p
-                        key={e.id}
-                        className={[
-                          open ? 'rounded-t-xl' : 'rounded-xl',
-                          'bg-white px-4 py-3'
-                        ].join(' ')}>
-                        <span>
-                          Ep. {e.episode_number} - {e.name}
-                        </span>
-                        <br />
-                        <span className="text-gray-500 text-sm">
-                          {new Date(e.air_date).toLocaleDateString()}
-                        </span>
-                      </p>
-                    </Disclosure.Button>
-                    <Disclosure.Panel className="bg-white rounded-b-xl p-3 pb-6 flex items-start space-x-4">
-                      <img
-                        alt="still"
-                        className="rounded-xl"
-                        src={`${config.tmdbImageUrl}/w300${e.still_path}`}
-                      />
-                      <p className="max-w-prose">{e.overview}</p>
-                    </Disclosure.Panel>
-                  </>
-                )}
-              </Disclosure>
+            {details.episodes.map(ep => (
+              <EpisodeCard key={ep.id} ep={ep} />
             ))}
           </ul>
         </div>
       )}
     </div>
+  )
+}
+
+function EpisodeCard({ ep }) {
+  const sonarr = useSonarrData()
+  const MonitorStatusIcon = episodeStatus(sonarr, ep.season_number, ep.episode_number)
+    ? EyeIcon
+    : EyeOffIcon
+
+  return (
+    <Disclosure as="li">
+      {({ open }) => (
+        <>
+          <Disclosure.Button
+            className={[
+              open ? 'rounded-t-xl' : 'rounded-xl',
+              'bg-white px-4 py-3 w-full text-left flex items-center'
+            ].join(' ')}>
+            <p>
+              <span>
+                Ep. {ep.episode_number} - {ep.name}
+              </span>
+              <br />
+              <span className="text-gray-500 text-sm">
+                {new Date(ep.air_date).toLocaleDateString()}
+              </span>
+            </p>
+            <div className="flex-grow"></div>
+            <div>
+              <MonitorStatusIcon className="text-gray-400 w-6 h-6" />
+            </div>
+          </Disclosure.Button>
+          <Disclosure.Panel className="bg-white rounded-b-xl p-3 pb-6 flex items-start space-x-4">
+            <img
+              alt="still"
+              className="rounded-xl"
+              src={`${config.tmdbImageUrl}/w300${ep.still_path}`}
+            />
+            <p className="max-w-prose">{ep.overview}</p>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   )
 }
 
