@@ -1,7 +1,5 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import Nav from './Nav'
-import UserMenu from './UserMenu'
+import Header from './Header'
 import config from '@/lib/config'
 import useAuthGuard from '@/lib/auth/useAuthGuard'
 import { useRouter } from 'next/router'
@@ -21,15 +19,7 @@ export default function Layout({ children }) {
         {/* <Image src="/img/dice-bg.jpg" priority layout="fill" objectFit="cover" /> */}
       </div>
       <div className="h-full">
-        <nav
-          style={{ minWidth: 'var(--nav-min-width)' }}
-          className="bg-blue-600 flex items-center justify-center">
-          <Link href="/">
-            <a className="text-4xl leading-none p-1 rounded-full mx-3 bg-black bg-opacity-20">∞</a>
-          </Link>
-          <Nav />
-          <UserMenu />
-        </nav>
+        <Header />
         <div className="flex-auto pb-4">{children}</div>
       </div>
     </div>
