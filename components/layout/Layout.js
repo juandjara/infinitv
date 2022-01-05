@@ -2,20 +2,16 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Nav from './Nav'
 import UserMenu from './UserMenu'
-import { CogIcon as SettingsIcon } from '@heroicons/react/solid'
-import NavLink from '@/components/common/NavLink'
 import config from '@/lib/config'
-import useRoleCheck from '@/lib/auth/useRoleCheck'
 import useAuthGuard from '@/lib/auth/useAuthGuard'
 import { useRouter } from 'next/router'
 
 export default function Layout({ children }) {
-  const isAdmin = useRoleCheck('superadmin')
   const router = useRouter()
   useAuthGuard(/^\/login/.test(router.pathname) === false)
 
   return (
-    <div className="relative flex flex-col text-white h-screen font-sans">
+    <div className="text-white font-sans">
       <Head>
         <meta name="theme-color" content="#c0392b" />
         <meta name="description" content={config.appDescription} />
@@ -24,28 +20,17 @@ export default function Layout({ children }) {
       <div className="bgimage">
         {/* <Image src="/img/dice-bg.jpg" priority layout="fill" objectFit="cover" /> */}
       </div>
-      <div className="h-full md:flex align-stretch">
+      <div className="h-full">
         <nav
           style={{ minWidth: 'var(--nav-min-width)' }}
-          className="md:pb-4 flex md:flex-col items-start justify-center md:bg-gray-700 md:bg-opacity-25">
+          className="bg-blue-600 flex items-center justify-center">
           <Link href="/">
-            <a className="h-20 hidden md:flex items-center px-4 hover:opacity-75">
-              <p className="text-3xl mr-4 tracking-wider">InfiniTV</p>
-              {/* <Image src="/img/index_bg.png" width={75} height={75} /> */}
-            </a>
+            <a className="text-4xl leading-none p-1 rounded-full mx-3 bg-black bg-opacity-20">∞</a>
           </Link>
           <Nav />
-          {isAdmin && (
-            <NavLink
-              href="/settings"
-              className="mr-0 pr-1 pl-1 flex items-center space-x-2 md:w-full">
-              <SettingsIcon className="w-10 h-10" />
-              <p className="hidden md:block">Ajustes</p>
-            </NavLink>
-          )}
           <UserMenu />
         </nav>
-        <div className="md:h-screen overflow-y-auto flex-auto pb-4">{children}</div>
+        <div className="flex-auto pb-4">{children}</div>
       </div>
     </div>
   )

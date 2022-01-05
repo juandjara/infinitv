@@ -1,12 +1,17 @@
 import config from '@/lib/config'
 import useTVDetails from '@/lib/tv/useTVDetails'
 import { useQueryParams } from '@/lib/useQueryParams'
-import { ChevronDownIcon, ChevronRightIcon, EyeIcon, EyeOffIcon, StarIcon } from '@heroicons/react/solid'
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  EyeIcon,
+  EyeOffIcon,
+  StarIcon
+} from '@heroicons/react/solid'
 import Link from 'next/link'
 import BackButton from '@/components/common/BackButton'
 import axios from 'axios'
 import { Disclosure } from '@headlessui/react'
-import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 async function fetchTVSeason(id, season) {
@@ -62,6 +67,8 @@ export default function TvDetails() {
   const watchRegion =
     typeof navigator !== 'undefined' && navigator.language.split('-').pop().toUpperCase()
 
+  const firstSeasonNumber = data?.seasons[0]?.season_number
+
   if (loading || error) {
     return null
   }
@@ -75,7 +82,7 @@ export default function TvDetails() {
           <div className="container mx-auto pt-5 px-4">
             <BackButton colors="bg-opacity-20 text-white bg-gray-50 hover:bg-opacity-50" />
           </div>
-          <header className="container mx-auto px-3 pt-4 pb-10 flex justify-center space-x-6">
+          <header className="container mx-auto px-3 pt-4 pb-10 flex flex-col md:flex-row justify-center md:space-x-6 md:space-y-0 space-x-0 space-y-6">
             <div>
               <img
                 alt="poster"
@@ -108,13 +115,13 @@ export default function TvDetails() {
           </header>
         </div>
       </div>
-      <div className="container mx-auto px-3 py-6 flex justify-center space-x-6">
+      <div className="container mx-auto px-3 py-6 md:flex justify-center md:space-x-6 space-x-0 space-y-6 md:space-y-0">
         <div style={{ width: 342 }} className="space-y-8 flex-shrink-0">
           <Networks networks={data.networks} />
           <WatchProviders watchProviders={data['watch/providers']['results'][watchRegion]} />
           <div>
-            <p className="mb-8 ml-1 text-lg text-accent-100">Reparto</p>
-            <ul className="space-y-8">
+            <p className="mb-2 ml-1 text-lg text-accent-100">Reparto</p>
+            <ul className="space-y-4">
               {data.credits.cast.map(p => (
                 <PersonCard key={p.credit_id} person={p} />
               ))}
@@ -125,7 +132,7 @@ export default function TvDetails() {
           {data.seasons
             .filter(s => s.season_number > 0)
             .map(s => (
-              <SeasonCard key={s.id} id={params.id} season={s} />
+              <SeasonCard key={s.id} firstSeason={firstSeasonNumber} season={s} />
             ))}
         </div>
       </div>
@@ -133,12 +140,12 @@ export default function TvDetails() {
   )
 }
 
-function SeasonCard({ season }) {
+function SeasonCard({ season, firstSeason = 1 }) {
   const sonarr = useSonarrData()
   const MonitorStatusIcon = seasonStatus(sonarr, season.season_number) ? EyeIcon : EyeOffIcon
   return (
     <section>
-      <Disclosure defaultOpen={season.season_number === 1}>
+      <Disclosure defaultOpen={season.season_number === firstSeason}>
         {({ open }) => (
           <>
             <Disclosure.Button
@@ -189,7 +196,7 @@ function SeasonDetails({ season }) {
   return (
     <div className="bg-opacity-80 text-gray-900 bg-white rounded-b-xl">
       {details.overview && <p className="max-w-prose mb-4 px-4">{details.overview}</p>}
-      <ul className="bg-white rounded-b-xl py-1">
+      <ul className="bg-white rounded-b-xl py-1 divide-y divide-blue-200">
         {details.episodes.map(ep => (
           <EpisodeCard key={ep.id} ep={ep} />
         ))}
@@ -205,7 +212,7 @@ function EpisodeCard({ ep }) {
     : EyeOffIcon
 
   return (
-    <li className="m-3 p-1 flex items-start space-x-4">
+    <li className="p-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
       {ep.still_path && <img alt="still" src={`${config.tmdbImageUrl}/w300${ep.still_path}`} />}
       <div>
         <p className="mb-4">
@@ -221,33 +228,6 @@ function EpisodeCard({ ep }) {
       </div>
     </li>
   )
-  // return (
-  //   <Disclosure as="li">
-  //     {({ open }) => (
-  //       <>
-  //         <Disclosure.Button
-  //           className={[
-  //             open ? 'rounded-t-xl' : 'rounded-xl',
-  //             'bg-white px-4 py-3 w-full text-left flex items-center'
-  //           ].join(' ')}>
-
-  //           <div className="flex-grow"></div>
-  //           <div>
-  //             <MonitorStatusIcon className="text-gray-400 w-6 h-6" />
-  //           </div>
-  //         </Disclosure.Button>
-  //         <Disclosure.Panel className="bg-white rounded-b-xl p-3 pb-6 flex items-start space-x-4">
-  //           <img
-  //             alt="still"
-  //             className="rounded-xl"
-  //             src={`${config.tmdbImageUrl}/w300${ep.still_path}`}
-  //           />
-  //           <p className="max-w-prose">{ep.overview}</p>
-  //         </Disclosure.Panel>
-  //       </>
-  //     )}
-  //   </Disclosure>
-  // )
 }
 
 function Networks({ networks }) {
@@ -282,11 +262,7 @@ function WatchProviders({ watchProviders }) {
 
   return (
     <div>
-      <p className="mb-2 ml-1 leading-tight text-lg text-accent-100">
-        <span>Ahora en streaming en</span>
-        <br />
-        <span className="text-sm text-gray-300">Data by JustWatch</span>
-      </p>
+      <p className="mb-2 ml-1 leading-tight text-lg text-accent-100">Ahora en streaming en</p>
       <ul className="bg-accent-100 bg-opacity-20 rounded-xl p-3 grid grid-cols-4 gap-y-6 gap-x-2">
         {watchProviders.flatrate.map(wp => (
           <li key={wp.provider_id} className="flex-shrink-0">
@@ -302,17 +278,18 @@ function WatchProviders({ watchProviders }) {
           </li>
         ))}
       </ul>
+      <p className="my-2 ml-1 leading-tight text-sm text-gray-300">Data by JustWatch</p>
     </div>
   )
 }
 
 function PersonCard({ person }) {
   return (
-    <li className="flex items-center space-x-4 bg-white text-gray-700 rounded-md shadow-md">
-      <div className="w-20 h-20 rounded-full">
+    <li className="flex items-center space-x-2 bg-white text-gray-700 rounded-md shadow-md">
+      <div className="m-2 w-20 h-20 rounded-full">
         <img
           alt="avatar"
-          className="-mt-5 rounded-full w-full object-contain"
+          className="rounded-full w-full h-full object-cover"
           src={`${config.tmdbImageUrl}/w185${person.profile_path}`}
         />
       </div>
