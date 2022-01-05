@@ -13,6 +13,7 @@ import BackButton from '@/components/common/BackButton'
 import axios from 'axios'
 import { Disclosure } from '@headlessui/react'
 import useSWR from 'swr'
+import Spinner from '@/components/common/Spinner'
 
 async function fetchTVSeason(id, season) {
   const tmdbURL = config.tmdbApiUrl
@@ -69,7 +70,15 @@ export default function TvDetails() {
 
   const firstSeasonNumber = data?.seasons[0]?.season_number
 
-  if (loading || error) {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner size={16} />
+      </div>
+    )
+  }
+
+  if (error) {
     return null
   }
 
