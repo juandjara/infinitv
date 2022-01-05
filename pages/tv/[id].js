@@ -7,6 +7,7 @@ import BackButton from '@/components/common/BackButton'
 import axios from 'axios'
 import { Disclosure } from '@headlessui/react'
 import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 async function fetchTVSeason(id, season) {
   const tmdbURL = config.tmdbApiUrl
@@ -112,8 +113,8 @@ export default function TvDetails() {
           <Networks networks={data.networks} />
           <WatchProviders watchProviders={data['watch/providers']['results'][watchRegion]} />
           <div>
-            <p className="mb-2 ml-1 text-lg text-accent-100">Reparto</p>
-            <ul className="space-y-6">
+            <p className="mb-8 ml-1 text-lg text-accent-100">Reparto</p>
+            <ul className="space-y-8">
               {data.credits.cast.map(p => (
                 <PersonCard key={p.credit_id} person={p} />
               ))}
@@ -176,35 +177,23 @@ function SeasonCard({ season }) {
 
 function SeasonDetails({ season }) {
   const { params } = useQueryParams()
-  const [details, setDetails] = useState(null)
+  const { data: details, error } = useSWR(
+    `season-details?id=${params.id}&s=${season.season_number}`,
+    () => fetchTVSeason(params.id, season.season_number)
+  )
 
-  useEffect(() => {
-    async function process() {
-      const data = await fetchTVSeason(params.id, season.season_number)
-      setDetails(data)
-    }
-    process()
-  }, [params.id, season.season_number])
+  if (!details || error) {
+    return null
+  }
 
   return (
-    <div className="flex items-start space-x-4 bg-opacity-80 text-gray-900 bg-white rounded-b-xl p-3">
-      <img
-        alt="poster"
-        className="rounded-xl"
-        width="240"
-        height="240"
-        src={`${config.tmdbImageUrl}/w342${season.poster_path}`}
-      />
-      {details && (
-        <div className="flex-grow">
-          {details.overview && <p className="max-w-prose mb-4">{details.overview}</p>}
-          <ul className="space-y-4">
-            {details.episodes.map(ep => (
-              <EpisodeCard key={ep.id} ep={ep} />
-            ))}
-          </ul>
-        </div>
-      )}
+    <div className="bg-opacity-80 text-gray-900 bg-white rounded-b-xl">
+      {details.overview && <p className="max-w-prose mb-4 px-4">{details.overview}</p>}
+      <ul className="bg-white rounded-b-xl py-1">
+        {details.episodes.map(ep => (
+          <EpisodeCard key={ep.id} ep={ep} />
+        ))}
+      </ul>
     </div>
   )
 }
@@ -216,40 +205,49 @@ function EpisodeCard({ ep }) {
     : EyeOffIcon
 
   return (
-    <Disclosure as="li">
-      {({ open }) => (
-        <>
-          <Disclosure.Button
-            className={[
-              open ? 'rounded-t-xl' : 'rounded-xl',
-              'bg-white px-4 py-3 w-full text-left flex items-center'
-            ].join(' ')}>
-            <p>
-              <span>
-                Ep. {ep.episode_number} - {ep.name}
-              </span>
-              <br />
-              <span className="text-gray-500 text-sm">
-                {new Date(ep.air_date).toLocaleDateString()}
-              </span>
-            </p>
-            <div className="flex-grow"></div>
-            <div>
-              <MonitorStatusIcon className="text-gray-400 w-6 h-6" />
-            </div>
-          </Disclosure.Button>
-          <Disclosure.Panel className="bg-white rounded-b-xl p-3 pb-6 flex items-start space-x-4">
-            <img
-              alt="still"
-              className="rounded-xl"
-              src={`${config.tmdbImageUrl}/w300${ep.still_path}`}
-            />
-            <p className="max-w-prose">{ep.overview}</p>
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
+    <li className="m-3 p-1 flex items-start space-x-4">
+      {ep.still_path && <img alt="still" src={`${config.tmdbImageUrl}/w300${ep.still_path}`} />}
+      <div>
+        <p className="mb-4">
+          <span className="text-primary-600">
+            Ep. {ep.episode_number} - {ep.name}
+          </span>
+          <br />
+          <span className="text-gray-500 text-sm">
+            {new Date(ep.air_date).toLocaleDateString()}
+          </span>
+        </p>
+        <p className="max-w-prose">{ep.overview}</p>
+      </div>
+    </li>
   )
+  // return (
+  //   <Disclosure as="li">
+  //     {({ open }) => (
+  //       <>
+  //         <Disclosure.Button
+  //           className={[
+  //             open ? 'rounded-t-xl' : 'rounded-xl',
+  //             'bg-white px-4 py-3 w-full text-left flex items-center'
+  //           ].join(' ')}>
+
+  //           <div className="flex-grow"></div>
+  //           <div>
+  //             <MonitorStatusIcon className="text-gray-400 w-6 h-6" />
+  //           </div>
+  //         </Disclosure.Button>
+  //         <Disclosure.Panel className="bg-white rounded-b-xl p-3 pb-6 flex items-start space-x-4">
+  //           <img
+  //             alt="still"
+  //             className="rounded-xl"
+  //             src={`${config.tmdbImageUrl}/w300${ep.still_path}`}
+  //           />
+  //           <p className="max-w-prose">{ep.overview}</p>
+  //         </Disclosure.Panel>
+  //       </>
+  //     )}
+  //   </Disclosure>
+  // )
 }
 
 function Networks({ networks }) {
@@ -311,11 +309,13 @@ function WatchProviders({ watchProviders }) {
 function PersonCard({ person }) {
   return (
     <li className="flex items-center space-x-4 bg-white text-gray-700 rounded-md shadow-md">
-      <img
-        alt="avatar"
-        className="rounded-md"
-        src={`${config.tmdbImageUrl}/w138_and_h175_face${person.profile_path}`}
-      />
+      <div className="w-20 h-20 rounded-full">
+        <img
+          alt="avatar"
+          className="-mt-5 rounded-full w-full object-contain"
+          src={`${config.tmdbImageUrl}/w185${person.profile_path}`}
+        />
+      </div>
       <div>
         <p className="text-gray-500">{person.name}</p>
         <p className="text-lg font-medium mt-1">{person.character}</p>
