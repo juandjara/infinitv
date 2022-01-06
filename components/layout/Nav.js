@@ -44,7 +44,7 @@ export default function Nav() {
 
   return (
     <>
-      <div className="w-full hidden md:flex flex-1 md:space-x-2">
+      <div className="py-3 w-full hidden md:flex flex-1 md:space-x-2">
         {filteredLinks.map(l => (
           <NavLink key={l.href} href={l.href}>
             {l.text}

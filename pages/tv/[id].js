@@ -4,10 +4,11 @@ import { useQueryParams } from '@/lib/useQueryParams'
 import {
   ChevronDownIcon,
   ChevronRightIcon,
-  EyeIcon,
-  EyeOffIcon,
-  StarIcon
+  StarIcon,
+  BookmarkIcon,
+  LinkIcon
 } from '@heroicons/react/solid'
+import { CloudDownloadIcon, BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/outline'
 import Link from 'next/link'
 import BackButton from '@/components/common/BackButton'
 import axios from 'axios'
@@ -35,7 +36,7 @@ async function fetchTVSeason(id, season) {
   return res.data
 }
 
-function seasonStatus(sonarrData, seasonNumber) {
+function isSeasonMonitored(sonarrData, seasonNumber) {
   if (!sonarrData) {
     return false
   }
@@ -44,7 +45,7 @@ function seasonStatus(sonarrData, seasonNumber) {
   return season && season.monitored
 }
 
-function episodeStatus(sonarrData, seasonNumber, episodeNumber) {
+function isEpisodeMonitored(sonarrData, seasonNumber, episodeNumber) {
   if (!sonarrData) {
     return false
   }
@@ -53,6 +54,17 @@ function episodeStatus(sonarrData, seasonNumber, episodeNumber) {
     e => e.seasonNumber === seasonNumber && e.episodeNumber === episodeNumber
   )
   return episode && episode.monitored
+}
+
+function episodeHasFile(sonarrData, seasonNumber, episodeNumber) {
+  if (!sonarrData) {
+    return false
+  }
+
+  const episode = sonarrData.episodes.find(
+    e => e.seasonNumber === seasonNumber && e.episodeNumber === episodeNumber
+  )
+  return episode && episode.hasFile
 }
 
 function useSonarrData() {
@@ -151,7 +163,12 @@ export default function TvDetails() {
 
 function SeasonCard({ season, firstSeason = 1 }) {
   const sonarr = useSonarrData()
-  const MonitorStatusIcon = seasonStatus(sonarr, season.season_number) ? EyeIcon : EyeOffIcon
+  const monitored = isSeasonMonitored(sonarr, season.season_number)
+  const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
+  const monitorStatusTitle = monitored
+    ? 'Eliminar de la lista de seguimiento'
+    : 'Añadir a la lista de seguimiento'
+
   return (
     <section>
       <Disclosure defaultOpen={season.season_number === firstSeason}>
@@ -177,8 +194,11 @@ function SeasonCard({ season, firstSeason = 1 }) {
                 </p>
               </div>
               <div className="flex-grow"></div>
-              <div>
-                <MonitorStatusIcon className="text-gray-400 w-6 h-6" />
+              <div title="Buscar y descargar automaticamente todos los capitulos de esta serie">
+                <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
+              </div>
+              <div title={monitorStatusTitle}>
+                <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
               </div>
             </Disclosure.Button>
             <Disclosure.Panel unmount>
@@ -216,24 +236,45 @@ function SeasonDetails({ season }) {
 
 function EpisodeCard({ ep }) {
   const sonarr = useSonarrData()
-  const MonitorStatusIcon = episodeStatus(sonarr, ep.season_number, ep.episode_number)
-    ? EyeIcon
-    : EyeOffIcon
+  const monitored = isEpisodeMonitored(sonarr, ep.season_number, ep.episode_number)
+  const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
+  const monitorStatusTitle = monitored
+    ? 'Eliminar de la lista de seguimiento'
+    : 'Añadir a la lista de seguimiento'
+
+  const hasFile = episodeHasFile(sonarr, ep.season_number, ep.episode_number)
+  const DownloadIcon = hasFile ? LinkIcon : CloudDownloadIcon
+  const downloadTitle = hasFile
+    ? 'Descargar archivo de video'
+    : 'Buscar y descargar torrent automaticamente'
 
   return (
-    <li className="p-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
+    <li className="group p-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
       {ep.still_path && <img alt="still" src={`${config.tmdbImageUrl}/w300${ep.still_path}`} />}
-      <div>
-        <p className="mb-4">
-          <span className="text-primary-600">
-            Ep. {ep.episode_number} - {ep.name}
-          </span>
-          <br />
-          <span className="text-gray-500 text-sm">
-            {new Date(ep.air_date).toLocaleDateString()}
-          </span>
-        </p>
-        <p className="max-w-prose">{ep.overview}</p>
+      <div className="flex-grow">
+        <div className="flex items-center space-x-2 mr-2">
+          <p>
+            <span className="text-primary-600">
+              Ep. {ep.episode_number} - {ep.name}
+            </span>
+            <br />
+            <span className="text-gray-500 text-sm">
+              {new Date(ep.air_date).toLocaleDateString()}
+            </span>
+          </p>
+          <div className="flex-grow"></div>
+          <div
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            title={downloadTitle}>
+            <DownloadIcon className="text-gray-500 w-6 h-6" />
+          </div>
+          <div
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            title={monitorStatusTitle}>
+            <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
+          </div>
+        </div>
+        <p className="mt-4 max-w-prose">{ep.overview}</p>
       </div>
     </li>
   )
