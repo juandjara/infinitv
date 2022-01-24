@@ -122,12 +122,23 @@ export default function TvDetails() {
 }
 
 function SeasonCard({ season, firstSeason = 1 }) {
-  const { sonarr } = useSonarrData()
+  const { sonarr, mutate } = useSonarrData()
   const monitored = isSeasonMonitored(sonarr, season.season_number)
   const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
   const monitorStatusTitle = monitored
     ? 'Eliminar de la lista de seguimiento'
     : 'Añadir a la lista de seguimiento'
+
+  const [loading, runMutation] = useMutation(async () => {
+    await editSonarrSeasonMonitoring(sonarr, season.season_number)
+    await mutate()
+  })
+
+  function toggleMonitoring(ev) {
+    ev.preventDefault()
+    ev.stopPropagation()
+    runMutation()
+  }
 
   return (
     <section>
@@ -157,13 +168,18 @@ function SeasonCard({ season, firstSeason = 1 }) {
               <div title="Buscar y descargar automaticamente todos los capitulos de esta serie">
                 <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
               </div>
-              <Button
-                hasIcon="only"
-                title={monitorStatusTitle}
-                background="bg-transparent hover:bg-gray-100"
-                border="border-none">
-                <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
-              </Button>
+              {loading ? (
+                <Spinner color="blue-400" size={8} />
+              ) : (
+                <Button
+                  hasIcon="only"
+                  title={monitorStatusTitle}
+                  background="bg-transparent hover:bg-gray-100"
+                  border="border-none"
+                  onClick={toggleMonitoring}>
+                  <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
+                </Button>
+              )}
             </Disclosure.Button>
             <Disclosure.Panel unmount>
               <SeasonDetails season={season} />
