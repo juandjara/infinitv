@@ -15,17 +15,22 @@ import { Disclosure } from '@headlessui/react'
 import useSWR from 'swr'
 import Spinner from '@/components/common/Spinner'
 import {
-  episodeHasFile,
+  editSonarrEpisode,
   fetchTVSeason,
-  isEpisodeMonitored,
+  getSonarrEpisode,
   isSeasonMonitored
 } from '@/lib/tv/tvUtils'
+import Button from '@/components/common/Button'
+import { useState } from 'react'
 
 function useSonarrData() {
   const { params } = useQueryParams()
-  const { data } = useTVDetails(params.id)
+  const { data, mutate } = useTVDetails(params.id)
 
-  return data && data.sonarr
+  return {
+    sonarr: data && data.sonarr,
+    mutate
+  }
 }
 
 export default function TvDetails() {
@@ -116,7 +121,7 @@ export default function TvDetails() {
 }
 
 function SeasonCard({ season, firstSeason = 1 }) {
-  const sonarr = useSonarrData()
+  const { sonarr } = useSonarrData()
   const monitored = isSeasonMonitored(sonarr, season.season_number)
   const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
   const monitorStatusTitle = monitored
@@ -151,9 +156,13 @@ function SeasonCard({ season, firstSeason = 1 }) {
               <div title="Buscar y descargar automaticamente todos los capitulos de esta serie">
                 <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
               </div>
-              <div title={monitorStatusTitle}>
+              <Button
+                hasIcon="only"
+                title={monitorStatusTitle}
+                background="bg-transparent hover:bg-gray-100"
+                border="border-none">
                 <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
-              </div>
+              </Button>
             </Disclosure.Button>
             <Disclosure.Panel unmount>
               <SeasonDetails season={season} />
@@ -189,18 +198,38 @@ function SeasonDetails({ season }) {
 }
 
 function EpisodeCard({ ep }) {
-  const sonarr = useSonarrData()
-  const monitored = isEpisodeMonitored(sonarr, ep.season_number, ep.episode_number)
+  const { sonarr, mutate } = useSonarrData()
+  const sonarrEpisode = getSonarrEpisode(sonarr, ep.season_number, ep.episode_number)
+  const monitored = sonarrEpisode.monitored
   const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
   const monitorStatusTitle = monitored
     ? 'Eliminar de la lista de seguimiento'
     : 'Añadir a la lista de seguimiento'
 
-  const hasFile = episodeHasFile(sonarr, ep.season_number, ep.episode_number)
+  const hasFile = sonarrEpisode.hasFile
   const DownloadIcon = hasFile ? LinkIcon : CloudDownloadIcon
   const downloadTitle = hasFile
     ? 'Descargar archivo de video'
     : 'Buscar y descargar torrent automaticamente'
+
+  // todo: encapsulate loading and error logic inside an "useMutation" hook
+  const [loading, setLoading] = useState(false)
+
+  async function updateMonitoring() {
+    const newData = {
+      ...sonarrEpisode,
+      monitored: !sonarrEpisode.monitored
+    }
+
+    setLoading(true)
+    try {
+      await editSonarrEpisode(newData)
+      mutate()
+    } catch (err) {
+      console.log('error changing monitor status for episode', err)
+    }
+    setLoading(false)
+  }
 
   return (
     <li className="group p-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
@@ -222,11 +251,19 @@ function EpisodeCard({ ep }) {
             title={downloadTitle}>
             <DownloadIcon className="text-gray-500 w-6 h-6" />
           </div>
-          <div
-            className="md:opacity-0 group-hover:opacity-100 transition-opacity"
-            title={monitorStatusTitle}>
-            <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
-          </div>
+          {loading ? (
+            <Spinner color="blue-400" size={8} />
+          ) : (
+            <Button
+              hasIcon="only"
+              className="md:opacity-0 group-hover:opacity-100 transition-opacity"
+              background="bg-transparent hover:bg-gray-100"
+              border="border-none"
+              title={monitorStatusTitle}
+              onClick={updateMonitoring}>
+              <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
+            </Button>
+          )}
         </div>
         <p className="mt-4 max-w-prose">{ep.overview}</p>
       </div>
