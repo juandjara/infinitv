@@ -11,61 +11,15 @@ import {
 import { CloudDownloadIcon, BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/outline'
 import Link from 'next/link'
 import BackButton from '@/components/common/BackButton'
-import axios from 'axios'
 import { Disclosure } from '@headlessui/react'
 import useSWR from 'swr'
 import Spinner from '@/components/common/Spinner'
-
-async function fetchTVSeason(id, season) {
-  const tmdbURL = config.tmdbApiUrl
-  const tmdbApiKey = process.env.NEXT_PUBLIC_TMDB_KEY
-
-  if (!id) {
-    return null
-  }
-
-  const url = `${tmdbURL}/tv/${id}/season/${season}`
-
-  const params = {
-    api_key: tmdbApiKey,
-    language: navigator.language
-    // append_to_response: 'external_ids,watch/providers,aggregate_credits'
-  }
-
-  const res = await axios.get(url, { params })
-  return res.data
-}
-
-function isSeasonMonitored(sonarrData, seasonNumber) {
-  if (!sonarrData) {
-    return false
-  }
-
-  const season = sonarrData.seasons.find(s => s.seasonNumber === seasonNumber)
-  return season && season.monitored
-}
-
-function isEpisodeMonitored(sonarrData, seasonNumber, episodeNumber) {
-  if (!sonarrData) {
-    return false
-  }
-
-  const episode = sonarrData.episodes.find(
-    e => e.seasonNumber === seasonNumber && e.episodeNumber === episodeNumber
-  )
-  return episode && episode.monitored
-}
-
-function episodeHasFile(sonarrData, seasonNumber, episodeNumber) {
-  if (!sonarrData) {
-    return false
-  }
-
-  const episode = sonarrData.episodes.find(
-    e => e.seasonNumber === seasonNumber && e.episodeNumber === episodeNumber
-  )
-  return episode && episode.hasFile
-}
+import {
+  episodeHasFile,
+  fetchTVSeason,
+  isEpisodeMonitored,
+  isSeasonMonitored
+} from '@/lib/tv/tvUtils'
 
 function useSonarrData() {
   const { params } = useQueryParams()
@@ -136,7 +90,7 @@ export default function TvDetails() {
           </header>
         </div>
       </div>
-      <div className="container mx-auto px-3 py-6 md:flex justify-center md:space-x-6 space-x-0 space-y-6 md:space-y-0">
+      <div className="container mx-auto px-3 py-6 flex flex-col md:flex-row justify-center md:space-x-6 space-x-0 space-y-6 md:space-y-0">
         <div style={{ width: 342 }} className="space-y-8 flex-shrink-0">
           <Networks networks={data.networks} />
           <WatchProviders watchProviders={data['watch/providers']['results'][watchRegion]} />
@@ -149,7 +103,7 @@ export default function TvDetails() {
             </ul>
           </div>
         </div>
-        <div className="flex-grow space-y-8 mt-10">
+        <div className="order-first md:order-none flex-grow space-y-8 mt-10 pb-4">
           {data.seasons
             .filter(s => s.season_number > 0)
             .map(s => (
@@ -264,12 +218,12 @@ function EpisodeCard({ ep }) {
           </p>
           <div className="flex-grow"></div>
           <div
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            className="md:opacity-0 group-hover:opacity-100 transition-opacity"
             title={downloadTitle}>
             <DownloadIcon className="text-gray-500 w-6 h-6" />
           </div>
           <div
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            className="md:opacity-0 group-hover:opacity-100 transition-opacity"
             title={monitorStatusTitle}>
             <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
           </div>
