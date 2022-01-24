@@ -15,13 +15,14 @@ import { Disclosure } from '@headlessui/react'
 import useSWR from 'swr'
 import Spinner from '@/components/common/Spinner'
 import {
-  editSonarrEpisode,
+  editSonarrEpisodeMonitoring,
+  editSonarrSeasonMonitoring,
   fetchTVSeason,
   getSonarrEpisode,
   isSeasonMonitored
 } from '@/lib/tv/tvUtils'
 import Button from '@/components/common/Button'
-import { useState } from 'react'
+import useMutation from '@/lib/useMutation'
 
 function useSonarrData() {
   const { params } = useQueryParams()
@@ -212,24 +213,10 @@ function EpisodeCard({ ep }) {
     ? 'Descargar archivo de video'
     : 'Buscar y descargar torrent automaticamente'
 
-  // todo: encapsulate loading and error logic inside an "useMutation" hook
-  const [loading, setLoading] = useState(false)
-
-  async function updateMonitoring() {
-    const newData = {
-      ...sonarrEpisode,
-      monitored: !sonarrEpisode.monitored
-    }
-
-    setLoading(true)
-    try {
-      await editSonarrEpisode(newData)
-      mutate()
-    } catch (err) {
-      console.log('error changing monitor status for episode', err)
-    }
-    setLoading(false)
-  }
+  const [loading, updateMonitoring] = useMutation(async () => {
+    await editSonarrEpisodeMonitoring(sonarrEpisode)
+    await mutate()
+  })
 
   return (
     <li className="group p-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
