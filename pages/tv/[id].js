@@ -67,7 +67,7 @@ export default function TvDetails() {
             <div>
               <img
                 alt="poster"
-                className="rounded-xl"
+                className="rounded-xl block mx-auto"
                 src={`${config.tmdbImageUrl}/w342${data.poster_path}`}
               />
             </div>
@@ -236,7 +236,13 @@ function EpisodeCard({ ep }) {
 
   return (
     <li className="group p-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
-      {ep.still_path && <img alt="still" src={`${config.tmdbImageUrl}/w300${ep.still_path}`} />}
+      {ep.still_path && (
+        <img
+          className="block mx-auto"
+          alt="still"
+          src={`${config.tmdbImageUrl}/w300${ep.still_path}`}
+        />
+      )}
       <div className="flex-grow">
         <div className="flex items-center space-x-2 mr-2">
           <p>
