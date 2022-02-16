@@ -33,6 +33,7 @@ export function getButtonStyle({ small, hasIcon, color, background, border, disa
 }
 
 export default function Button({
+  as: Component = 'button',
   className = '',
   children,
   hasIcon,
@@ -52,8 +53,8 @@ export default function Button({
     small
   })}`
   return (
-    <button disabled={disabled} className={classes} {...props}>
+    <Component disabled={disabled} className={classes} {...props}>
       {children}
-    </button>
+    </Component>
   )
 }

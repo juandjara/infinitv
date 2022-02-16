@@ -6,9 +6,10 @@ import {
   ChevronRightIcon,
   StarIcon,
   BookmarkIcon,
-  LinkIcon
+  LinkIcon,
+  SearchIcon
 } from '@heroicons/react/solid'
-import { CloudDownloadIcon, BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/outline'
+import { BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/outline'
 import Link from 'next/link'
 import BackButton from '@/components/common/BackButton'
 import { Disclosure } from '@headlessui/react'
@@ -110,6 +111,9 @@ export default function TvDetails() {
           </div>
         </div>
         <div className="order-first md:order-none flex-grow space-y-8 mt-10 pb-4">
+          <div className="px-1">
+            <p className="text-3xl">Temporadas</p>
+          </div>
           {data.seasons
             .filter(s => s.season_number > 0)
             .map(s => (
@@ -165,9 +169,13 @@ function SeasonCard({ season, firstSeason = 1 }) {
                 </p>
               </div>
               <div className="flex-grow"></div>
-              <div title="Buscar y descargar automaticamente todos los capitulos de esta serie">
-                <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
-              </div>
+              <Button
+                hasIcon="only"
+                background="bg-transparent hover:bg-gray-100"
+                border="border-none"
+                title="Lanzar tarea de búsqueda">
+                <SearchIcon className="text-gray-500 w-6 h-6" />
+              </Button>
               {loading ? (
                 <Spinner color="blue-400" size={8} />
               ) : (
@@ -205,7 +213,7 @@ function SeasonDetails({ season }) {
   return (
     <div className="bg-opacity-80 text-gray-900 bg-white rounded-b-xl">
       {details.overview && <p className="max-w-prose mb-4 px-4">{details.overview}</p>}
-      <ul className="bg-white rounded-b-xl py-1 divide-y divide-blue-200">
+      <ul className="rounded-b-xl py-1">
         {details.episodes.map(ep => (
           <EpisodeCard key={ep.id} ep={ep} />
         ))}
@@ -217,34 +225,36 @@ function SeasonDetails({ season }) {
 function EpisodeCard({ ep }) {
   const { sonarr, mutate } = useSonarrData()
   const sonarrEpisode = getSonarrEpisode(sonarr, ep.season_number, ep.episode_number)
-  const monitored = sonarrEpisode.monitored
+  const monitored = sonarrEpisode?.monitored
   const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
   const monitorStatusTitle = monitored
     ? 'Eliminar de la lista de seguimiento'
     : 'Añadir a la lista de seguimiento'
 
-  const hasFile = sonarrEpisode.hasFile
-  const DownloadIcon = hasFile ? LinkIcon : CloudDownloadIcon
-  const downloadTitle = hasFile
-    ? 'Descargar archivo de video'
-    : 'Buscar y descargar torrent automaticamente'
+  const hasFile = sonarrEpisode?.hasFile
 
   const [loading, updateMonitoring] = useMutation(async () => {
     await editSonarrEpisodeMonitoring(sonarrEpisode)
     await mutate()
   })
 
+  function getFileLink(ep) {
+    const base = 'https://cloud.fuken.xyz'
+    const path = ep.episodeFile.path
+    return `${base}/${path.replace('/media/completed', 'tv')}`
+  }
+
   return (
-    <li className="group p-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
+    <li className="group px-4 py-3 md:flex items-start md:space-x-4 space-x-0 space-y-4 md:space-y-0">
       {ep.still_path && (
         <img
-          className="block mx-auto"
+          className="w-full md:w-auto block mx-auto rounded-lg"
           alt="still"
           src={`${config.tmdbImageUrl}/w300${ep.still_path}`}
         />
       )}
       <div className="flex-grow">
-        <div className="flex items-center space-x-2 mr-2">
+        <div className="flex items-center space-x-2">
           <p>
             <span className="text-primary-600">
               Ep. {ep.episode_number} - {ep.name}
@@ -255,11 +265,26 @@ function EpisodeCard({ ep }) {
             </span>
           </p>
           <div className="flex-grow"></div>
-          <div
+          {hasFile && (
+            <Button
+              hasIcon="only"
+              className="md:opacity-0 group-hover:opacity-100 transition-opacity"
+              background="bg-transparent hover:bg-gray-100"
+              border="border-none"
+              title="Descargar archivo de video"
+              as="a"
+              href={getFileLink(sonarrEpisode)}>
+              <LinkIcon className="text-gray-500 w-6 h-6" />
+            </Button>
+          )}
+          <Button
+            hasIcon="only"
             className="md:opacity-0 group-hover:opacity-100 transition-opacity"
-            title={downloadTitle}>
-            <DownloadIcon className="text-gray-500 w-6 h-6" />
-          </div>
+            background="bg-transparent hover:bg-gray-100"
+            border="border-none"
+            title="Lanzar tarea de búsqueda">
+            <SearchIcon className="text-gray-500 w-6 h-6" />
+          </Button>
           {loading ? (
             <Spinner color="blue-400" size={8} />
           ) : (

@@ -21,10 +21,14 @@ export default function TV() {
   const { series, loading, error } = useSonarrSeries()
 
   function handlePageChange(page) {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, page }
-    })
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page }
+      },
+      null,
+      { scroll: false }
+    )
   }
 
   const pages = []

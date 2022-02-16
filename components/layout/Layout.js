@@ -18,9 +18,9 @@ export default function Layout({ children }) {
       <div className="bgimage">
         {/* <Image src="/img/dice-bg.jpg" priority layout="fill" objectFit="cover" /> */}
       </div>
-      <div className="h-full">
+      <div className="min-h-screen flex flex-col">
         <Header />
-        <div className="flex-auto pb-4">{children}</div>
+        <div className="flex flex-col flex-auto h-full pb-4">{children}</div>
       </div>
     </div>
   )
