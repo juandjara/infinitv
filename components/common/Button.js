@@ -37,9 +37,9 @@ export default function Button({
   className = '',
   children,
   hasIcon,
-  color,
-  background,
-  border,
+  color = '',
+  background = '',
+  border = '',
   disabled,
   small,
   ...props

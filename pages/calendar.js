@@ -63,7 +63,9 @@ export default function Calendar() {
           events={data}
           titleAccessor={ev => (
             <div className="my-1">
-              <p title={ev.series.title} className="text-sm">{ev.series.title}</p>
+              <p title={ev.series.title} className="text-sm">
+                {ev.series.title}
+              </p>
               <p title={ev.title}>
                 <span className="text-sm"> {formatEpNumber(ev)} </span>
                 <span> {ev.title} </span>

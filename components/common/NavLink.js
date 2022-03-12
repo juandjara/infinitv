@@ -2,7 +2,15 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 // taken from here: https://github.com/vercel/next.js/blob/canary/examples/active-class-name/components/ActiveLink.js
-export default function NavLink({ href, display = 'block', active = false, children, as, className = '', onClick }) {
+export default function NavLink({
+  href,
+  display = 'block',
+  active = false,
+  children,
+  as,
+  className = '',
+  onClick
+}) {
   const { asPath } = useRouter()
 
   // props.href will be matched by routes like `/catalog`
