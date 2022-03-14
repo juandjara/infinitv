@@ -1,5 +1,7 @@
 import useProfiles from '@/lib/settings/useProfiles'
+import { editSeries } from '@/lib/tv/tvUtils'
 import useTVDetails from '@/lib/tv/useTVDetails'
+import useMutation from '@/lib/useMutation'
 import { useQueryParams } from '@/lib/useQueryParams'
 import { useEffect, useState } from 'react'
 import Button from '../common/Button'
@@ -31,31 +33,41 @@ const TYPE_OPTIONS = [
 export default function SeriesEditModal({ open, setOpen }) {
   const { params } = useQueryParams()
   const { data: profiles } = useProfiles()
-  const { data: details } = useTVDetails(params.id)
-  const sonarr = details && details.sonarr
+  const { data: details, mutate } = useTVDetails(params.id)
 
   const [form, setForm] = useState({
-    profile: null,
-    type: 'standard'
+    seasons: [],
+    profileId: null,
+    seriesType: 'standard'
   })
 
   useEffect(() => {
-    setForm({
-      ...sonarr,
-      profileId: sonarr.profileId || null,
-      seriesType: sonarr.seriesType || 'standard'
-    })
-  }, [sonarr])
+    if (details.sonarr) {
+      setForm({
+        ...details.sonarr,
+        seasons: details.sonarr.seasons || [],
+        profileId: details.sonarr.profileId || null,
+        seriesType: details.sonarr.seriesType || 'standard'
+      })
+    }
+  }, [details.sonarr])
 
   const selectedProfile = profiles.find(p => p.value === form.profileId)
   const selectedType = TYPE_OPTIONS.find(t => t.value === form.seriesType)
 
-  function update(key, value) {
-    setForm(form => ({ ...form, [key]: value }))
-  }
+  const [loading, updateSeries] = useMutation(async () => {
+    await editSeries(form)
+    await mutate()
+  })
 
   async function handleSubmit(ev) {
     ev.preventDefault()
+    await updateSeries()
+    setOpen(false)
+  }
+
+  function update(key, value) {
+    setForm(form => ({ ...form, [key]: value }))
   }
 
   return (
@@ -78,12 +90,13 @@ export default function SeriesEditModal({ open, setOpen }) {
 
         <div>
           <p className="text-sm text-gray-100 mb-1">Seguimiento</p>
-          <SeasonMonitoringTable sonarr={form} onEdit={setForm} />
+          <SeasonMonitoringTable form={form} onEdit={setForm} />
         </div>
 
         <div className="space-x-2 flex justify-start">
           <Button
             type="submit"
+            disabled={loading}
             border="border border-transparent"
             color="text-blue-900"
             background="bg-blue-100 hover:bg-blue-200">

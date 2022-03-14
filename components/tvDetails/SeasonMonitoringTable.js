@@ -1,19 +1,19 @@
-export default function SeasonMonitoringTable({ sonarr, onEdit }) {
+export default function SeasonMonitoringTable({ form, onEdit }) {
   const headers = ['Season', '# op episodes', 'Status']
-  const allSelected = sonarr.seasons.every(s => s.monitored)
+  const allSelected = form.seasons.every(s => s.monitored)
 
   function toggleAll() {
     const flag = !allSelected
     onEdit({
-      ...sonarr,
-      seasons: sonarr.seasons.map(s => ({ ...s, monitored: flag }))
+      ...form,
+      seasons: form.seasons.map(s => ({ ...s, monitored: flag }))
     })
   }
 
   function editSeason(seasonNumber, flag) {
     onEdit({
-      ...sonarr,
-      seasons: sonarr.seasons.map(s =>
+      ...form,
+      seasons: form.seasons.map(s =>
         s.seasonNumber === seasonNumber ? { ...s, monitored: flag } : s
       )
     })
@@ -49,7 +49,7 @@ export default function SeasonMonitoringTable({ sonarr, onEdit }) {
           </tr>
         </thead>
         <tbody>
-          {sonarr.seasons.map(season => (
+          {form.seasons.map(season => (
             <tr key={season.seasonNumber} className="border-b bg-blue-700 border-blue-600">
               <td className="p-4 w-4">
                 <div className="flex items-center">
