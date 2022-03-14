@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import Button from '../common/Button'
 import Modal from '../common/Modal'
 import Select from '../common/Select'
+import SeasonMonitoringTable from './SeasonMonitoringTable'
 
 const TYPE_OPTIONS = [
   {
@@ -27,18 +28,6 @@ const TYPE_OPTIONS = [
   }
 ]
 
-const MONITOR_OPTIONS = [
-  { label: 'Primera temporada', value: 'first_season' },
-  { label: 'Última temporada', value: 'last_season' },
-  { label: 'Solo el primer episodio', value: 'pilot' },
-  { label: 'Episodios futuros', value: 'future' },
-  { label: 'Todo', value: 'all' }
-]
-
-function getMonitoringOption() {
-  return 'all'
-}
-
 export default function SeriesEditModal({ open, setOpen }) {
   const { params } = useQueryParams()
   const { data: profiles } = useProfiles()
@@ -47,21 +36,19 @@ export default function SeriesEditModal({ open, setOpen }) {
 
   const [form, setForm] = useState({
     profile: null,
-    type: 'standard',
-    monitoring: 'all'
+    type: 'standard'
   })
 
   useEffect(() => {
     setForm({
-      profile: sonarr.profileId || null,
-      type: sonarr.seriesType || 'standard',
-      monitoring: getMonitoringOption(sonarr)
+      ...sonarr,
+      profileId: sonarr.profileId || null,
+      seriesType: sonarr.seriesType || 'standard'
     })
   }, [sonarr])
 
-  const selectedProfile = profiles.find(p => p.value === form.profile)
-  const selectedType = TYPE_OPTIONS.find(t => t.value === form.type)
-  const selectedMonitoring = MONITOR_OPTIONS.find(m => m.value === form.monitoring)
+  const selectedProfile = profiles.find(p => p.value === form.profileId)
+  const selectedType = TYPE_OPTIONS.find(t => t.value === form.seriesType)
 
   function update(key, value) {
     setForm(form => ({ ...form, [key]: value }))
@@ -72,34 +59,27 @@ export default function SeriesEditModal({ open, setOpen }) {
   }
 
   return (
-    <Modal
-      as="form"
-      title="Editar serie"
-      className="space-y-4"
-      open={open}
-      onClose={() => setOpen(false)}>
-      <form className="space-y-4" onSubmit={handleSubmit}>
+    <Modal title="Editar serie" open={open} onClose={() => setOpen(false)}>
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <Select
           className="w-full"
           label="Calidad"
           options={profiles}
           selected={selectedProfile}
-          onChange={opt => update('profile', opt.value)}
+          onChange={opt => update('profileId', opt.value)}
         />
         <Select
           className="w-full"
           label="Tipo de serie"
           options={TYPE_OPTIONS}
           selected={selectedType}
-          onChange={opt => update('type', opt.value)}
+          onChange={opt => update('seriesType', opt.value)}
         />
-        <Select
-          className="w-full"
-          label="Seguimiento"
-          options={MONITOR_OPTIONS}
-          selected={selectedMonitoring}
-          onChange={opt => update('monitoring', opt.value)}
-        />
+
+        <div>
+          <p className="text-sm text-gray-100 mb-1">Seguimiento</p>
+          <SeasonMonitoringTable sonarr={form} onEdit={setForm} />
+        </div>
 
         <div className="space-x-2 flex justify-start">
           <Button

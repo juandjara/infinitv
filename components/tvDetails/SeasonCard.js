@@ -1,9 +1,5 @@
-import {
-  BookmarkIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  CloudDownloadIcon
-} from '@heroicons/react/solid'
+import { BookmarkIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { CloudDownloadIcon } from '@heroicons/react/outline'
 import { BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/outline'
 import useMutation from '@/lib/useMutation'
 import { editSonarrSeasonMonitoring, isSeasonMonitored, SEARCH_TASK_TITLE } from '@/lib/tv/tvUtils'
