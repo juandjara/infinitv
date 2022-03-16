@@ -1,4 +1,4 @@
-import useProfiles from '@/lib/settings/useProfiles'
+import useQualityProfiles from '@/lib/settings/useQualityProfiles'
 import { editSeries } from '@/lib/tv/tvUtils'
 import useTVDetails from '@/lib/tv/useTVDetails'
 import useMutation from '@/lib/useMutation'
@@ -32,7 +32,7 @@ const TYPE_OPTIONS = [
 
 export default function SeriesEditModal({ open, setOpen }) {
   const { params } = useQueryParams()
-  const { data: profiles } = useProfiles()
+  const { data: profiles } = useQualityProfiles()
   const { data: details, mutate } = useTVDetails(params.id)
 
   const [form, setForm] = useState({

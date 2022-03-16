@@ -17,7 +17,7 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
     ? 'Eliminar de la lista de seguimiento'
     : 'Añadir a la lista de seguimiento'
 
-  const [loading, runMutation] = useMutation(async () => {
+  const [loading, updateSeasonMonitoring] = useMutation(async () => {
     await editSonarrSeasonMonitoring(sonarr, season.season_number)
     await mutate()
   })
@@ -25,7 +25,7 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
   function toggleMonitoring(ev) {
     ev.preventDefault()
     ev.stopPropagation()
-    runMutation()
+    updateSeasonMonitoring()
   }
 
   return (
@@ -74,7 +74,7 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
                 </Button>
               )}
             </Disclosure.Button>
-            <Disclosure.Panel unmount>
+            <Disclosure.Panel unmount={false}>
               <SeasonDetails season={season} />
             </Disclosure.Panel>
           </>
