@@ -71,7 +71,10 @@ export default function SeriesEditModal({ open, setOpen }) {
   }
 
   return (
-    <Modal title="Editar serie" open={open} onClose={() => setOpen(false)}>
+    <Modal
+      title={form.isLookup ? 'Añadir a mis series' : 'Editar serie'}
+      open={open}
+      onClose={() => setOpen(false)}>
       <form className="space-y-6" onSubmit={handleSubmit}>
         <Select
           className="w-full"
@@ -96,7 +99,7 @@ export default function SeriesEditModal({ open, setOpen }) {
         <div className="space-x-2 flex justify-start">
           <Button
             type="submit"
-            disabled={loading}
+            disabled={loading || !form.profileId}
             border="border border-transparent"
             color="text-blue-900"
             background="bg-blue-100 hover:bg-blue-200">

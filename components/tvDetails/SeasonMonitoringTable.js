@@ -50,7 +50,10 @@ export default function SeasonMonitoringTable({ form, onEdit }) {
         </thead>
         <tbody>
           {form.seasons.map(season => (
-            <tr key={season.seasonNumber} className="border-b bg-blue-700 border-blue-600">
+            <tr
+              key={season.seasonNumber}
+              onClick={() => editSeason(season.seasonNumber, !season.monitored)}
+              className="cursor-pointer border-b bg-blue-700 hover:bg-opacity-75 border-blue-600">
               <td className="p-4 w-4">
                 <div className="flex items-center">
                   <input
@@ -69,7 +72,7 @@ export default function SeasonMonitoringTable({ form, onEdit }) {
                 <span>Season {season.seasonNumber}</span>
               </td>
               <td className="py-4 px-4 text-sm whitespace-nowrap text-blue-300">
-                {season.statistics.totalEpisodeCount}
+                {season?.statistics?.totalEpisodeCount}
               </td>
               <td className="py-4 px-4 w-36 text-sm whitespace-nowrap text-blue-300">
                 {season.monitored ? 'Monitored' : 'Not Monitored'}

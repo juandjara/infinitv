@@ -12,8 +12,9 @@ export default async function sonarrSeriesEdit(req, res) {
   try {
     const series = req.body
     const { url, apikey } = settingsRow.settings.sonarr
-    const data = await axios.put(`${url}/api/series?apikey=${apikey}`, series).then(res => res.data)
-    res.json(data)
+    const method = series.isLookup ? 'post' : 'put'
+    const response = await axios[method](`${url}/api/series?apikey=${apikey}`, series)
+    res.json(response.data)
   } catch (err) {
     res.status(500).json({ code: err.code, message: err.message })
   }
