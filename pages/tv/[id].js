@@ -95,12 +95,16 @@ export default function TvDetails() {
           <div className="px-1 flex justify-between items-center">
             <p className="text-3xl">Temporadas</p>
             <Button
-              hasIcon="only"
+              hasIcon={data.sonarr.isLookup ? null : 'only'}
               title="Editar serie"
               background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
               border="border-none"
               onClick={() => setEditModalOpen(true)}>
-              <AdjustmentsIcon className="text-gray-500 w-6 h-6" />
+              {data.sonarr.isLookup ? (
+                <p>Añadir a descargas</p>
+              ) : (
+                <AdjustmentsIcon title="Editar serie" className="text-gray-500 w-6 h-6" />
+              )}
             </Button>
           </div>
           {data.seasons

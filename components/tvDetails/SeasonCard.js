@@ -52,26 +52,30 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
                   {season.air_date && ' - ' + new Date(season.air_date).toLocaleDateString()}
                 </p>
               </div>
-              <div className="flex-grow"></div>
-              <Button
-                hasIcon="only"
-                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-                border="border-none"
-                title={SEARCH_TASK_TITLE}>
-                <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
-              </Button>
-              {loading ? (
-                <Spinner color="blue-400" size={8} />
-              ) : (
-                <Button
-                  hasIcon="only"
-                  title={monitorStatusTitle}
-                  className="ml-2"
-                  background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-                  border="border-none"
-                  onClick={toggleMonitoring}>
-                  <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
-                </Button>
+              {sonarr.isLookup ? null : (
+                <>
+                  <div className="flex-grow"></div>
+                  <Button
+                    hasIcon="only"
+                    background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                    border="border-none"
+                    title={SEARCH_TASK_TITLE}>
+                    <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
+                  </Button>
+                  {loading ? (
+                    <Spinner color="blue-400" size={8} />
+                  ) : (
+                    <Button
+                      hasIcon="only"
+                      title={monitorStatusTitle}
+                      className="ml-2"
+                      background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                      border="border-none"
+                      onClick={toggleMonitoring}>
+                      <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
+                    </Button>
+                  )}
+                </>
               )}
             </Disclosure.Button>
             <Disclosure.Panel unmount={false}>

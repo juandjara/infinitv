@@ -30,12 +30,22 @@ const TYPE_OPTIONS = [
   }
 ]
 
+const MONITOR_OPTIONS = [
+  { value: 'pilot', label: 'Episodio piloto' },
+  { value: 'future', label: 'Episodios futuros' },
+  { value: 'missing', label: 'Todos los episodios' },
+  { value: 'firstSeason', label: 'Primera Temporada' },
+  { value: 'lastSeason', label: 'Última temporada' },
+  { value: 'none', label: 'Ninguno' }
+]
+
 export default function SeriesEditModal({ open, setOpen }) {
   const { params } = useQueryParams()
   const { data: profiles } = useQualityProfiles()
   const { data: details, mutate } = useTVDetails(params.id)
 
   const [form, setForm] = useState({
+    addOptions: { monitor: 'missing' },
     seasons: [],
     profileId: null,
     seriesType: 'standard'
@@ -54,6 +64,7 @@ export default function SeriesEditModal({ open, setOpen }) {
 
   const selectedProfile = profiles.find(p => p.value === form.profileId)
   const selectedType = TYPE_OPTIONS.find(t => t.value === form.seriesType)
+  const selectedMonitoring = MONITOR_OPTIONS.find(opt => opt.value === form?.addOptions?.monitor)
 
   const [loading, updateSeries] = useMutation(async () => {
     await editSeries(form)
@@ -70,9 +81,19 @@ export default function SeriesEditModal({ open, setOpen }) {
     setForm(form => ({ ...form, [key]: value }))
   }
 
+  function handleMonitoringChange(value) {
+    setForm(form => ({
+      ...form,
+      addOptions: {
+        ...form.addOptions,
+        monitor: value
+      }
+    }))
+  }
+
   return (
     <Modal
-      title={form.isLookup ? 'Añadir a mis series' : 'Editar serie'}
+      title={form.isLookup ? 'Añadir a descargas' : 'Editar serie'}
       open={open}
       onClose={() => setOpen(false)}>
       <form className="space-y-6" onSubmit={handleSubmit}>
@@ -90,12 +111,20 @@ export default function SeriesEditModal({ open, setOpen }) {
           selected={selectedType}
           onChange={opt => update('seriesType', opt.value)}
         />
-
-        <div>
-          <p className="text-sm text-gray-100 mb-1">Seguimiento</p>
-          <SeasonMonitoringTable form={form} onEdit={setForm} />
-        </div>
-
+        {details.sonarr.isLookup ? (
+          <Select
+            className="w-full"
+            label="Seguimiento"
+            options={MONITOR_OPTIONS}
+            selected={selectedMonitoring}
+            onChange={opt => handleMonitoringChange(opt.value)}
+          />
+        ) : (
+          <div>
+            <p className="text-sm text-gray-100 mb-1">Seguimiento</p>
+            <SeasonMonitoringTable form={form} onEdit={setForm} />
+          </div>
+        )}
         <div className="space-x-2 flex justify-start">
           <Button
             type="submit"

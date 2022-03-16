@@ -50,41 +50,45 @@ export default function EpisodeCard({ ep }) {
         </p>
         <p className="mt-2 max-w-prose">{ep.overview}</p>
       </div>
-      <div className="flex items-center justify-end">
-        {hasFile && (
-          <Button
-            hasIcon="only"
-            className="md:opacity-0 group-hover:opacity-100 transition-opacity"
-            background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-            border="border-none"
-            title="Descargar archivo de video"
-            as="a"
-            href={getFileLink(sonarrEpisode)}>
-            <LinkIcon className="text-gray-500 w-6 h-6" />
-          </Button>
-        )}
-        <Button
-          hasIcon="only"
-          className="ml-2 md:opacity-0 group-hover:opacity-100 transition-opacity"
-          background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-          border="border-none"
-          title={SEARCH_TASK_TITLE}>
-          <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
-        </Button>
-        {loading ? (
-          <Spinner color="blue-400" size={8} />
-        ) : (
-          <Button
-            hasIcon="only"
-            className="ml-2 md:opacity-0 group-hover:opacity-100 transition-opacity"
-            background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-            border="border-none"
-            title={monitorStatusTitle}
-            onClick={updateMonitoring}>
-            <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
-          </Button>
-        )}
-      </div>
+      {sonarr.isLookup ? null : (
+        <>
+          <div className="flex items-center justify-end">
+            {hasFile && (
+              <Button
+                hasIcon="only"
+                className="md:opacity-0 group-hover:opacity-100 transition-opacity"
+                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                border="border-none"
+                title="Descargar archivo de video"
+                as="a"
+                href={getFileLink(sonarrEpisode)}>
+                <LinkIcon className="text-gray-500 w-6 h-6" />
+              </Button>
+            )}
+            <Button
+              hasIcon="only"
+              className="ml-2 md:opacity-0 group-hover:opacity-100 transition-opacity"
+              background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+              border="border-none"
+              title={SEARCH_TASK_TITLE}>
+              <CloudDownloadIcon className="text-gray-500 w-6 h-6" />
+            </Button>
+            {loading ? (
+              <Spinner color="blue-400" size={8} />
+            ) : (
+              <Button
+                hasIcon="only"
+                className="ml-2 md:opacity-0 group-hover:opacity-100 transition-opacity"
+                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                border="border-none"
+                title={monitorStatusTitle}
+                onClick={updateMonitoring}>
+                <MonitorStatusIcon className="text-gray-500 w-6 h-6" />
+              </Button>
+            )}
+          </div>
+        </>
+      )}
     </li>
   )
 }
