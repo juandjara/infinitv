@@ -26,7 +26,7 @@ function useCalendar() {
 
   useEffect(() => {
     if (error) {
-      setAlert(error.message)
+      setAlert('Error fetching calendar from Sonarr. Check browser console for more info')
     }
   }, [setAlert, error])
 
