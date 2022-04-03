@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import axios from 'axios'
+import axios from '@/lib/axios'
 import useSWR from 'swr'
 import { useAlert } from '@/components/alert/AlertContext'
 import { Calendar as BigCalendar, dateFnsLocalizer } from 'react-big-calendar'
