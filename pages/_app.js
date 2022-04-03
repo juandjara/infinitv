@@ -11,7 +11,7 @@ const ProgressBar = dynamic(() => import('@/components/common/NProgressBar'), { 
 
 function App({ Component, pageProps }) {
   return (
-    <SWRConfig value={{ revalidateOnFocus: false }}>
+    <SWRConfig value={{ revalidateOnFocus: false, errorRetryCount: 1 }}>
       <AlertProvider>
         <AuthProvider>
           <Layout>
