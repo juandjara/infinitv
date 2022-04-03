@@ -1,7 +1,10 @@
 import supabase from '@/lib/db-client/supabaseAdmin'
 import axios from 'axios'
+import authMiddleware from './_authMiddleware'
 
 export default async function sonarrEpisodeEdit(req, res) {
+  await authMiddleware(req, res)
+
   const { data: settingsRow, error } = await supabase.from('settings').select('settings').single()
 
   if (error) {
