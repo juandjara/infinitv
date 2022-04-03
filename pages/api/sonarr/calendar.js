@@ -1,35 +1,24 @@
-import supabase from '@/lib/db-client/supabaseAdmin'
 import axios from 'axios'
+import wrapAsync from '@/lib/api/wrapAsync'
+import authMiddleware from '../../../lib/api/authMiddleware'
+import fetchSonarrConfig from '@/lib/api/fetchSonarrConfig'
 import addMonths from 'date-fns/addMonths'
-import authMiddleware from './_authMiddleware'
 
-export default async function sonarrCalendar(req, res) {
+export default wrapAsync(async (req, res) => {
   await authMiddleware(req, res)
+  const now = new Date()
+  const start = addMonths(now, -6)
+  const end = addMonths(now, 6)
 
-  const { data: settingsRow, error } = await supabase.from('settings').select('settings').single()
+  const startDate = start.toISOString().split('T')[0]
+  const endDate = end.toISOString().split('T')[0]
 
-  if (error) {
-    res.status(500).json({ details: error.details, message: error.message })
-    return
+  const { url, apikey } = await fetchSonarrConfig()
+  const params = {
+    apikey,
+    start: startDate,
+    end: endDate
   }
-
-  try {
-    const now = new Date()
-    const start = addMonths(now, -6)
-    const end = addMonths(now, 6)
-
-    const startDate = start.toISOString().split('T')[0]
-    const endDate = end.toISOString().split('T')[0]
-
-    const { url, apikey } = settingsRow.settings.sonarr
-    const params = {
-      apikey,
-      start: startDate,
-      end: endDate
-    }
-    const data = await axios.get(`${url}/api/calendar`, { params }).then(res => res.data)
-    res.json(data)
-  } catch (err) {
-    res.status(500).json({ code: err.code, message: err.message })
-  }
-}
+  const data = await axios.get(`${url}/api/calendar`, { params }).then(res => res.data)
+  res.json(data)
+})
