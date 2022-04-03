@@ -66,14 +66,12 @@ export default function CredentialsEdit() {
   useEffect(() => {
     let timeout = null
     if (error) {
-      timeout = setTimeout(() => {
+      timeout = window.setTimeout(() => {
         setError(false)
       }, 3000)
     }
     return () => {
-      if (timeout) {
-        clearTimeout(timeout)
-      }
+      window.clearTimeout(timeout)
     }
   }, [error])
 

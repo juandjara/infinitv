@@ -16,11 +16,11 @@ function getAlertColor(type) {
 export default function Alert() {
   const { alert, setAlert } = useAlert()
   useEffect(() => {
-    let id
+    let timeout
     if (alert) {
-      id = window.setTimeout(() => setAlert(null), DEFAULT_DELAY)
+      timeout = window.setTimeout(() => setAlert(null), DEFAULT_DELAY)
     }
-    return () => window.clearTimeout(id)
+    return () => window.clearTimeout(timeout)
   }, [alert, setAlert])
 
   const alertText = typeof alert === 'object' ? alert?.text : alert
