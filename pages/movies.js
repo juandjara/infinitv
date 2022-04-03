@@ -85,16 +85,6 @@ function VideoCard({ item, genres }) {
     return genres.filter(g => ids.indexOf(g.id) !== -1).map(g => g.name)
   }
 
-  // async function checkSonarr() {
-  //   const res = await fetch('/api/sonarr/series')
-  //   if (res.ok) {
-  //     const json = await res.json()
-  //     console.log(json)
-  //   } else {
-  //     console.error(`Request failed with status code ${res.status}`)
-  //   }
-  // }
-
   return (
     <Link href={`/movies/${item.id}`}>
       <a
