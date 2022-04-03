@@ -1,3 +1,4 @@
+import Heading from '@/components/common/Heading'
 import MediaServerSettings from '@/components/settings/MediaServerSettings'
 import RadarrSettings from '@/components/settings/RadarrSettings'
 import SonarrSettings from '@/components/settings/SonarrSettings'
@@ -19,9 +20,7 @@ export default function Settings() {
 
   return (
     <main className="flex-auto my-4 container mx-auto px-3">
-      <h1 className="mb-4 mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
-        Ajustes
-      </h1>
+      <Heading className="mb-4 mt-16">Ajustes</Heading>
       <Tab.Group>
         <Tab.List className="rounded-t-lg flex bg-white border-opacity-20 border-gray-500 border-b-2">
           {tabs.map(tab => (

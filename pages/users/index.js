@@ -6,6 +6,7 @@ import Pagination from '@/components/common/Pagination'
 import SearchBox from '@/components/common/SearchBox'
 import UserFiltersPanel from '@/components/filters/UserFilterPanel'
 import UserListItem from '@/components/users/UserListItem'
+import Heading from '@/components/common/Heading'
 
 export default function UserList({ showAccessColumn = true }) {
   const router = useRouter()
@@ -27,9 +28,7 @@ export default function UserList({ showAccessColumn = true }) {
 
   return (
     <main className="flex-auto my-4 container mx-auto px-3">
-      <h1 className="mb-2 mt-16 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
-        Usuarios
-      </h1>
+      <Heading className="mb-2 mt-16">Usuarios</Heading>
       <div className="relative flex items-end mb-2">
         <h2 className="flex items-center text-xl font-semibold tracking-wide space-x-2">
           <Tag color="primary">{count}</Tag>

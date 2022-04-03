@@ -8,6 +8,7 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 import es from 'date-fns/locale/es'
+import Heading from '@/components/common/Heading'
 
 const localizer = dateFnsLocalizer({
   format,
@@ -52,9 +53,7 @@ export default function Calendar() {
 
   return (
     <main className="text-gray-500 my-4 container mx-auto px-3">
-      <h1 className="mt-16 mb-2 flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
-        Calendario
-      </h1>
+      <Heading className="mt-16 mb-2">Calendario</Heading>
       <div className="p-6 bg-white rounded-xl">
         <BigCalendar
           culture="es"

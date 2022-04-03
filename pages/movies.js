@@ -7,6 +7,7 @@ import MoviesFiltersPanel from '@/components/filters/MoviesFilterPanel'
 import Link from 'next/link'
 import Button from '@/components/common/Button'
 import { useRouter } from 'next/router'
+import Heading from '@/components/common/Heading'
 
 const tmdbImageURL = config.tmdbImageUrl
 
@@ -30,12 +31,12 @@ export default function Movies() {
 
   return (
     <main className="my-4 container mx-auto px-3">
-      <header className="-mx-3 mt-16 mb-2 px-3 py-1 sticky top-0 z-10 flex">
-        <h1 className="flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
-          Películas
-        </h1>
-        <SearchBox route="/movies" />
-        <MoviesFiltersPanel />
+      <header className="-mx-3 mt-16 mb-2 px-3 py-1 sticky top-0 z-10 flex items-baseline justify-between">
+        <Heading>Peliculas</Heading>
+        <div className="flex">
+          <SearchBox route="/movies" />
+          <MoviesFiltersPanel />
+        </div>
       </header>
       <ul className="grid grid-cols-cards gap-x-4 gap-y-4">{pages}</ul>
       {page > 5 ? (

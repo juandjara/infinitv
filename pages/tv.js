@@ -12,6 +12,7 @@ import { tmdbIdToImdbId } from '@/lib/tv/tvUtils'
 import { useState } from 'react'
 import { CheckIcon } from '@heroicons/react/outline'
 import useMutation from '@/lib/useMutation'
+import Heading from '@/components/common/Heading'
 
 const tmdbImageURL = config.tmdbImageUrl
 
@@ -39,13 +40,13 @@ export default function TV() {
 
   return (
     <div className="my-4 container mx-auto px-3">
-      <section>
-        <header className="-mx-3 mt-16 mb-2 px-3 py-1 sticky top-0 z-10 flex">
-          <h1 className="px-1 flex-1 font-bold text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-br from-accent-700 to-accent-300">
-            Cat&aacute;logo de series
-          </h1>
-          <SearchBox route="/tv" />
-          <TVFiltersPanel />
+      <section className="">
+        <header className="sticky z-10 top-0 -mx-3 mt-16 mb-2 px-3 py-1 flex items-baseline justify-between">
+          <Heading className="px-1">Cat&aacute;logo de series</Heading>
+          <div className="flex">
+            <SearchBox route="/tv" />
+            <TVFiltersPanel />
+          </div>
         </header>
         <main>
           <ul className="grid grid-cols-cards gap-x-4 gap-y-4">{pages}</ul>
