@@ -9,6 +9,24 @@ import Spinner from '@/components/common/Spinner'
 import PasswordInput from '@/components/password/PasswordInput'
 import WeakPasswordWarning from '@/components/password/WeakPasswordWarning'
 
+async function verifyCredentials(email, password) {
+  const { data, error } = await supabase.auth.api.signInWithEmail(email, password)
+  if (error) {
+    throw error
+  } else {
+    return data
+  }
+}
+
+async function updateCredentials(session, password) {
+  const { data, error } = await supabase.auth.api.updateUser(session.access_token, { password })
+  if (error) {
+    throw error
+  } else {
+    return data
+  }
+}
+
 export default function CredentialsEdit() {
   const [email, setEmail] = useState(null)
   const [currentPassword, setCurrentPassword] = useState('')
@@ -23,24 +41,6 @@ export default function CredentialsEdit() {
 
   const savedEmail = router.query.id ? user?.email : user?.sessionEmail
   const emailValue = (email === null ? savedEmail : email) || ''
-
-  async function verifyCredentials(email, password) {
-    const { data, error } = await supabase.auth.api.signInWithEmail(email, password)
-    if (error) {
-      throw error
-    } else {
-      return data
-    }
-  }
-
-  async function updateCredentials(session, password) {
-    const { data, error } = await supabase.auth.api.updateUser(session.access_token, { password })
-    if (error) {
-      throw error
-    } else {
-      return data
-    }
-  }
 
   async function handlePasswordSubmit(ev) {
     ev.preventDefault()
@@ -64,15 +64,15 @@ export default function CredentialsEdit() {
   }
 
   useEffect(() => {
-    let id = null
+    let timeout = null
     if (error) {
-      id = setTimeout(() => {
+      timeout = setTimeout(() => {
         setError(false)
       }, 3000)
     }
     return () => {
-      if (id) {
-        clearTimeout(id)
+      if (timeout) {
+        clearTimeout(timeout)
       }
     }
   }, [error])
