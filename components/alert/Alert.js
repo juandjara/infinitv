@@ -23,7 +23,7 @@ export default function Alert() {
     return () => window.clearTimeout(timeout)
   }, [alert, setAlert])
 
-  const alertText = typeof alert === 'object' ? alert?.text : alert
+  const alertText = typeof alert === 'string' ? alert : alert?.text
   const alertType = alert?.type || 'error'
   const color = getAlertColor(alertType)
 

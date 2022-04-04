@@ -5,16 +5,35 @@ import { useAlert } from '@/components/alert/AlertContext'
 import Button from '@/components/common/Button'
 import Label from '@/components/common/Label'
 import PasswordInput from '@/components/password/PasswordInput'
+import axios from 'axios'
+import useMutation from '@/lib/useMutation'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function RadarrSettings({ settings, settingsKey }) {
+export default function ArrSettings({ settings, settingsKey, label = '' }) {
   const sectionSettings = settings[settingsKey]
   const [form, setForm] = useState(sectionSettings)
-  const [loading, setLoading] = useState(false)
   const { setAlert } = useAlert()
+
+  const [saveLoading, saveSettings] = useMutation(() => {
+    return mutate('settings', async settings => {
+      const newSettings = {
+        ...settings,
+        [settingsKey]: form
+      }
+      await updateSettings(newSettings)
+      return newSettings
+    })
+  })
+
+  const [testLoading, testConnection] = useMutation(async () => {
+    const url = `${form.url}/api/system/status?apikey=${form.apikey}`
+    const { data } = await axios.get(url)
+    console.log(data)
+    setAlert({ type: 'success', text: 'Todo bien 👌' })
+  })
 
   useEffect(() => {
     setForm(sectionSettings)
@@ -24,50 +43,18 @@ export default function RadarrSettings({ settings, settingsKey }) {
     setForm(form => ({ ...form, [key]: value }))
   }
 
-  async function handleSubmit(ev) {
+  function handleSubmit(ev) {
     ev.preventDefault()
-    setLoading(true)
-    try {
-      await mutate('settings', async settings => {
-        const newSettings = {
-          ...settings,
-          [settingsKey]: form
-        }
-        await updateSettings(newSettings)
-        return newSettings
-      })
-    } catch (err) {
-      console.error(err)
-      setAlert(err.message)
-    }
-    setLoading(false)
+    saveSettings()
   }
 
-  async function tryConnection() {
-    try {
-      const url = `${form.url}/api/system/status?apikey=${form.apikey}`
-      const res = await fetch(url)
-      if (res.ok) {
-        const status = await res.json()
-        console.log(status)
-        alert('Connection OK!')
-      } else {
-        console.error(res)
-        alert('Connection Error!')
-      }
-    } catch (err) {
-      console.error(err)
-      alert('Connection Error!')
-    }
-  }
-
-  const formReady = !loading && !!(form.url && form.apikey)
+  const formReady = !saveLoading && !!(form.url && form.apikey)
 
   return (
     <form className="p-4 pt-8" onSubmit={handleSubmit}>
       <div className="flex items-center space-x-6">
         <div className="max-w-md flex-1">
-          <Label name="url" text="URL completa" />
+          <Label name="url" text={`${label} URL`} />
           <input
             id="url"
             type="url"
@@ -82,7 +69,7 @@ export default function RadarrSettings({ settings, settingsKey }) {
           />
         </div>
         <div className="max-w-md flex-1">
-          <Label name="apikey" text="API Key" />
+          <Label name="apikey" text={`${label} API Key`} />
           <PasswordInput
             id="apikey"
             placeholder="****"
@@ -93,21 +80,22 @@ export default function RadarrSettings({ settings, settingsKey }) {
           />
         </div>
       </div>
-      <div className="flex space-x-4 mt-6">
+      <div className="flex items-center justify-end space-x-4 mt-8">
         <Button
+          type="button"
+          onClick={testConnection}
+          disabled={!formReady || testLoading}
+          background="bg-blue-50 hover:bg-blue-100"
+          border="border-none">
+          Probar conexión
+        </Button>
+        <Button
+          type="submit"
           disabled={!formReady}
           border="border-none"
           background="bg-primary-500 hover:bg-primary-600"
           color="text-white">
           Guardar
-        </Button>
-        <Button
-          onClick={tryConnection}
-          disabled={!formReady}
-          border="border-none"
-          background="bg-green-500 hover:bg-green-600"
-          color="text-white">
-          Probar conexión
         </Button>
       </div>
     </form>
