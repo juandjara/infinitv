@@ -4,7 +4,6 @@ import { useQueryParams } from '@/lib/useQueryParams'
 import { StarIcon } from '@heroicons/react/solid'
 import { AdjustmentsIcon } from '@heroicons/react/outline'
 import BackButton from '@/components/common/BackButton'
-import Spinner from '@/components/common/Spinner'
 import Button from '@/components/common/Button'
 import { useState } from 'react'
 import SeriesEditModal from '@/components/tvDetails/SeriesEditModal'
@@ -12,6 +11,7 @@ import Networks from '@/components/tvDetails/Networks'
 import WatchProviders from '@/components/tvDetails/WatchProviders'
 import SeasonCard from '@/components/tvDetails/SeasonCard'
 import PersonCard from '@/components/tvDetails/PersonCard'
+import FullPageSpinner from '@/components/common/FullPageLoading'
 
 export default function TvDetails() {
   const { params } = useQueryParams()
@@ -24,11 +24,7 @@ export default function TvDetails() {
   const firstSeasonNumber = data?.seasons[0]?.season_number
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Spinner size={16} />
-      </div>
-    )
+    return <FullPageSpinner />
   }
 
   if (error) {
