@@ -32,10 +32,10 @@ export default function UserMenu() {
           <>
             <Menu.Button
               title="Open user menu"
-              className={`w-full flex items-center p-2 px-3 md:px-2 hover:bg-blue-500 hover:bg-opacity-50`}>
+              className={`w-full flex items-center p-2 px-3 md:px-2 group`}>
               <span className="sr-only">Open user menu</span>
-              <p className="hidden md:block mr-4">{user.name}</p>
-              <Avatar user={user} size={44} border="border-white" />
+              <p className="hidden md:block mr-4 group-hover:underline">{user.name}</p>
+              <Avatar user={user} size={44} border="group-hover:border-blue-200 border-white" />
             </Menu.Button>
             <Transition
               show={open}
