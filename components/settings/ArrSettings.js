@@ -51,9 +51,9 @@ export default function ArrSettings({ settings, settingsKey, label = '' }) {
   const formReady = !saveLoading && !!(form.url && form.apikey)
 
   return (
-    <form className="p-4 pt-8" onSubmit={handleSubmit}>
-      <div className="flex items-center space-x-6">
-        <div className="max-w-md flex-1">
+    <form className="px-4 py-6" onSubmit={handleSubmit}>
+      <div className="flex flex-wrap items-center md:space-x-4">
+        <div className="flex-grow mb-6">
           <Label name="url" text={`${label} URL`} />
           <input
             id="url"
@@ -68,7 +68,7 @@ export default function ArrSettings({ settings, settingsKey, label = '' }) {
             required
           />
         </div>
-        <div className="max-w-md flex-1">
+        <div className="flex-grow mb-6">
           <Label name="apikey" text={`${label} API Key`} />
           <PasswordInput
             id="apikey"
@@ -80,7 +80,7 @@ export default function ArrSettings({ settings, settingsKey, label = '' }) {
           />
         </div>
       </div>
-      <div className="flex items-center justify-end space-x-4 mt-8">
+      <div className="flex items-center justify-end space-x-4">
         <Button
           type="button"
           onClick={testConnection}

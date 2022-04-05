@@ -46,7 +46,7 @@ export default function MediaServerSettings({ settings, settingsKey }) {
 
   return (
     <form className="p-4 pt-8" onSubmit={handleSubmit}>
-      <div className="max-w-md flex-1">
+      <div>
         <Label name="url" text="File Server URL" />
         <input
           id="url"
