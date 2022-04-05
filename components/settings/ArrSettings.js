@@ -13,6 +13,16 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+async function tryConnection({ url, apikey }) {
+  try {
+    const { data } = await axios.get(`${url}/api/system/status?apikey=${apikey}`)
+    console.log(data)
+    return data
+  } catch (err) {
+    throw new Error('Connection test failed')
+  }
+}
+
 export default function ArrSettings({ settings, settingsKey, label = '', description = '' }) {
   const sectionSettings = settings[settingsKey]
   const [form, setForm] = useState(sectionSettings)
@@ -24,15 +34,14 @@ export default function ArrSettings({ settings, settingsKey, label = '', descrip
         ...settings,
         [settingsKey]: form
       }
+      await tryConnection(form)
       await updateSettings(newSettings)
       return newSettings
     })
   })
 
   const [testLoading, testConnection] = useMutation(async () => {
-    const url = `${form.url}/api/system/status?apikey=${form.apikey}`
-    const { data } = await axios.get(url)
-    console.log(data)
+    await tryConnection(form)
     setAlert({ type: 'success', text: 'Todo bien 👌' })
   })
 
