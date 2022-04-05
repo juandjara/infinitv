@@ -100,7 +100,9 @@ export default function SeriesEditModal({ open, setOpen }) {
           en la secci&oacute;n <em>Ajustes</em>
         </p>
         <Link href="/settings">
-          <Button>Ir a Ajustes</Button>
+          <a>
+            <Button>Ir a Ajustes</Button>
+          </a>
         </Link>
       </Modal>
     )
