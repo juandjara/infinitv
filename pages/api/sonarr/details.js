@@ -22,7 +22,7 @@ export default wrapAsync(async (req, res) => {
     return res.json({
       ...show,
       episodes: [],
-      isLookup: true,
+      isSaved: false,
       seasonFolder: true,
       addOptions: {
         monitor: 'missing',
@@ -39,6 +39,7 @@ export default wrapAsync(async (req, res) => {
     .get(`${url}/api/episode`, { params: { seriesId, apikey } })
     .then(res => res.data)
   details.episodes = episodes
+  details.isSaved = true
 
   res.json(details)
 })

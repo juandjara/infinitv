@@ -50,7 +50,7 @@ export default function EpisodeCard({ ep }) {
         </p>
         <p className="mt-2 max-w-prose">{ep.overview}</p>
       </div>
-      {sonarr && !sonarr.isLookup && (
+      {sonarr?.isSaved && (
         <>
           <div className="flex items-center justify-end">
             {hasFile && (

@@ -34,7 +34,7 @@ export default function TvDetails() {
 
   return (
     <main>
-      {data.sonarr && <SeriesEditModal open={editModalOpen} setOpen={setEditModalOpen} />}
+      <SeriesEditModal open={editModalOpen} setOpen={setEditModalOpen} />
       <div
         className="bg-cover bg-no-repeat"
         style={{ backgroundImage: `url('${config.tmdbImageUrl}/w1280${data.backdrop_path}')` }}>
@@ -91,20 +91,18 @@ export default function TvDetails() {
         <div className="order-first md:order-none flex-grow space-y-8 mt-10 pb-4">
           <div className="px-1 flex justify-between items-center">
             <p className="text-3xl text-accent-100">Temporadas</p>
-            {data.sonarr && (
-              <Button
-                hasIcon={data.sonarr.isLookup ? null : 'only'}
-                title="Editar serie"
-                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-                border="border-none"
-                onClick={() => setEditModalOpen(true)}>
-                {data.sonarr.isLookup ? (
-                  <p>Añadir a descargas</p>
-                ) : (
-                  <AdjustmentsIcon title="Editar serie" className="text-gray-500 w-6 h-6" />
-                )}
-              </Button>
-            )}
+            <Button
+              hasIcon={data.sonarr?.isSaved ? 'only' : null}
+              title="Editar serie"
+              background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+              border="border-none"
+              onClick={() => setEditModalOpen(true)}>
+              {data.sonarr?.isSaved ? (
+                <AdjustmentsIcon title="Editar serie" className="text-gray-500 w-6 h-6" />
+              ) : (
+                <p>Añadir a descargas</p>
+              )}
+            </Button>
           </div>
           {data.seasons
             .filter(s => s.season_number > 0)

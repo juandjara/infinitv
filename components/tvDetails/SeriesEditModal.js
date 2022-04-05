@@ -3,6 +3,7 @@ import { editSeries } from '@/lib/tv/tvUtils'
 import useTVDetails from '@/lib/tv/useTVDetails'
 import useMutation from '@/lib/useMutation'
 import { useQueryParams } from '@/lib/useQueryParams'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Button from '../common/Button'
 import Modal from '../common/Modal'
@@ -91,9 +92,23 @@ export default function SeriesEditModal({ open, setOpen }) {
     }))
   }
 
+  if (!details.sonarr) {
+    return (
+      <Modal title="Añadir a descargas" open={open} onClose={() => setOpen(false)}>
+        <p className="text-white pt-2 pb-8">
+          No hay ningun servidor Sonarr configurado para las descargas de series. Puedes añadir uno
+          en la secci&oacute;n <em>Ajustes</em>
+        </p>
+        <Link href="/settings">
+          <Button>Ir a Ajustes</Button>
+        </Link>
+      </Modal>
+    )
+  }
+
   return (
     <Modal
-      title={form.isLookup ? 'Añadir a descargas' : 'Editar serie'}
+      title={form.isSaved ? 'Editar serie' : 'Añadir a descargas'}
       open={open}
       onClose={() => setOpen(false)}>
       <form className="space-y-6" onSubmit={handleSubmit}>
@@ -111,7 +126,12 @@ export default function SeriesEditModal({ open, setOpen }) {
           selected={selectedType}
           onChange={opt => update('seriesType', opt.value)}
         />
-        {details.sonarr?.isLookup ? (
+        {details.sonarr?.isSaved ? (
+          <div>
+            <p className="text-sm text-gray-100 mb-1">Seguimiento</p>
+            <SeasonMonitoringTable form={form} onEdit={setForm} />
+          </div>
+        ) : (
           <Select
             className="w-full"
             label="Seguimiento"
@@ -119,11 +139,6 @@ export default function SeriesEditModal({ open, setOpen }) {
             selected={selectedMonitoring}
             onChange={opt => handleMonitoringChange(opt.value)}
           />
-        ) : (
-          <div>
-            <p className="text-sm text-gray-100 mb-1">Seguimiento</p>
-            <SeasonMonitoringTable form={form} onEdit={setForm} />
-          </div>
         )}
         <div className="space-x-2 flex justify-start">
           <Button

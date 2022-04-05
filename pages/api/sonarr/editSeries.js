@@ -7,7 +7,7 @@ export default wrapAsync(async (req, res) => {
   await authMiddleware(req, res)
   const series = req.body
   const { url, apikey } = await fetchSonarrConfig()
-  const method = series.isLookup ? 'post' : 'put'
+  const method = series.isSaved ? 'put' : 'post'
   const response = await axios[method](`${url}/api/series?apikey=${apikey}`, series)
   res.json(response.data)
 })
