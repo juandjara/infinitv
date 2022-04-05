@@ -7,12 +7,13 @@ import Label from '@/components/common/Label'
 import PasswordInput from '@/components/password/PasswordInput'
 import axios from 'axios'
 import useMutation from '@/lib/useMutation'
+import { InformationCircleIcon } from '@heroicons/react/outline'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ArrSettings({ settings, settingsKey, label = '' }) {
+export default function ArrSettings({ settings, settingsKey, label = '', description = '' }) {
   const sectionSettings = settings[settingsKey]
   const [form, setForm] = useState(sectionSettings)
   const { setAlert } = useAlert()
@@ -51,7 +52,13 @@ export default function ArrSettings({ settings, settingsKey, label = '' }) {
   const formReady = !saveLoading && !!(form.url && form.apikey)
 
   return (
-    <form className="px-4 py-6" onSubmit={handleSubmit}>
+    <form className="px-4 py-6 mb-6" onSubmit={handleSubmit}>
+      {description && (
+        <div className="bg-blue-50 text-blue-900 rounded-xl flex items-center p-3 space-x-3 mb-6">
+          <InformationCircleIcon className="text-blue-900 w-12 h-12 p-3 bg-blue-200 rounded-full" />
+          <p>{description}</p>
+        </div>
+      )}
       <div className="flex flex-wrap items-center md:space-x-4">
         <div className="flex-grow mb-6">
           <Label name="url" text={`${label} URL`} />
