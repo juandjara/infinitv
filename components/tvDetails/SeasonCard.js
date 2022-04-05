@@ -52,7 +52,7 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
                   {season.air_date && ' - ' + new Date(season.air_date).toLocaleDateString()}
                 </p>
               </div>
-              {sonarr.isLookup ? null : (
+              {sonarr && !sonarr.isLookup && (
                 <>
                   <div className="flex-grow"></div>
                   <Button

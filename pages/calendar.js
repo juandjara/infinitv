@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import axios from '@/lib/axios'
 import useSWR from 'swr'
 import { useAlert } from '@/components/alert/AlertContext'
@@ -9,6 +8,7 @@ import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 import es from 'date-fns/locale/es'
 import Heading from '@/components/common/Heading'
+import { useSettings } from '@/lib/settings/useSettings'
 
 const localizer = dateFnsLocalizer({
   format,
@@ -18,18 +18,23 @@ const localizer = dateFnsLocalizer({
   locales: { es }
 })
 
+function fetchCalendar(key, hasSettings) {
+  if (!hasSettings) {
+    return []
+  }
+
+  return axios.get('/api/sonarr/calendar').then(res => res.data)
+}
+
 function useCalendar() {
-  const { data, error } = useSWR('calendar', () =>
-    axios.get('/api/sonarr/calendar').then(res => res.data)
-  )
-
   const { setAlert } = useAlert()
-
-  useEffect(() => {
-    if (error) {
-      setAlert('Error fetching calendar from Sonarr. Check browser console for more info')
+  const { hasSonarr } = useSettings()
+  const { data, error } = useSWR(['calendar', hasSonarr], fetchCalendar, {
+    onError: err => {
+      console.error(err)
+      setAlert('Error fetching calendar from Sonarr.')
     }
-  }, [setAlert, error])
+  })
 
   return {
     data: data || [],

@@ -12,6 +12,7 @@ import WatchProviders from '@/components/tvDetails/WatchProviders'
 import SeasonCard from '@/components/tvDetails/SeasonCard'
 import PersonCard from '@/components/tvDetails/PersonCard'
 import FullPageSpinner from '@/components/common/FullPageLoading'
+import Heading from '@/components/common/Heading'
 
 export default function TvDetails() {
   const { params } = useQueryParams()
@@ -33,7 +34,7 @@ export default function TvDetails() {
 
   return (
     <main>
-      <SeriesEditModal open={editModalOpen} setOpen={setEditModalOpen} />
+      {data.sonarr && <SeriesEditModal open={editModalOpen} setOpen={setEditModalOpen} />}
       <div
         className="bg-cover bg-no-repeat"
         style={{ backgroundImage: `url('${config.tmdbImageUrl}/w1280${data.backdrop_path}')` }}>
@@ -53,12 +54,12 @@ export default function TvDetails() {
               <p className="text-lg font-medium">
                 {data.first_air_date && new Date(data.first_air_date).getFullYear()}
               </p>
-              <p className="text-4xl font-semibold text-accent-100">
+              <Heading>
                 <span>{data.name} </span>
                 {data.original_name !== data.name && (
                   <span className="text-xl font-medium text-gray-100">{data.original_name}</span>
                 )}
-              </p>
+              </Heading>
               <p className="text-lg">{data.genres.map(d => d.name).join(', ')}</p>
               <p className="text-lg">
                 {data.status} - {data.number_of_episodes} Episodios, {data.number_of_seasons}{' '}
@@ -89,19 +90,21 @@ export default function TvDetails() {
         </div>
         <div className="order-first md:order-none flex-grow space-y-8 mt-10 pb-4">
           <div className="px-1 flex justify-between items-center">
-            <p className="text-3xl">Temporadas</p>
-            <Button
-              hasIcon={data.sonarr.isLookup ? null : 'only'}
-              title="Editar serie"
-              background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-              border="border-none"
-              onClick={() => setEditModalOpen(true)}>
-              {data.sonarr.isLookup ? (
-                <p>Añadir a descargas</p>
-              ) : (
-                <AdjustmentsIcon title="Editar serie" className="text-gray-500 w-6 h-6" />
-              )}
-            </Button>
+            <p className="text-3xl text-accent-100">Temporadas</p>
+            {data.sonarr && (
+              <Button
+                hasIcon={data.sonarr.isLookup ? null : 'only'}
+                title="Editar serie"
+                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                border="border-none"
+                onClick={() => setEditModalOpen(true)}>
+                {data.sonarr.isLookup ? (
+                  <p>Añadir a descargas</p>
+                ) : (
+                  <AdjustmentsIcon title="Editar serie" className="text-gray-500 w-6 h-6" />
+                )}
+              </Button>
+            )}
           </div>
           {data.seasons
             .filter(s => s.season_number > 0)

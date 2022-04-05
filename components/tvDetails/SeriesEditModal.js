@@ -111,7 +111,7 @@ export default function SeriesEditModal({ open, setOpen }) {
           selected={selectedType}
           onChange={opt => update('seriesType', opt.value)}
         />
-        {details.sonarr.isLookup ? (
+        {details.sonarr?.isLookup ? (
           <Select
             className="w-full"
             label="Seguimiento"
