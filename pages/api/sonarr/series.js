@@ -1,6 +1,6 @@
 import axios from 'axios'
 import wrapAsync from '@/lib/api/wrapAsync'
-import authMiddleware from '../../../lib/api/authMiddleware'
+import authMiddleware from '@/lib/api/authMiddleware'
 import fetchSonarrConfig from '@/lib/api/fetchSonarrConfig'
 
 export default wrapAsync(async (req, res) => {

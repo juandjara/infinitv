@@ -12,6 +12,9 @@ export default function Downloads() {
         <Heading className="px-1">Mis series</Heading>
       </header>
       <main>
+        {series.length === 0 && (
+          <p className="my-6 font-medium text-lg">No hay ninguna descarga guardada</p>
+        )}
         <ul className="grid grid-cols-cards gap-x-4 gap-y-4">
           {loading && (
             <>

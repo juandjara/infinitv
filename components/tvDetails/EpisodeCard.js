@@ -6,8 +6,10 @@ import { CloudDownloadIcon, BookmarkIcon as BookmarkIconOutline } from '@heroico
 import config from '@/lib/config'
 import Button from '../common/Button'
 import Spinner from '../common/Spinner'
+import { useSettings } from '@/lib/settings/useSettings'
 
 export default function EpisodeCard({ ep }) {
+  const { settings } = useSettings()
   const { sonarr, mutate } = useSonarrDetails()
   const sonarrEpisode = getSonarrEpisode(sonarr, ep.season_number, ep.episode_number)
   const monitored = sonarrEpisode?.monitored
@@ -24,9 +26,9 @@ export default function EpisodeCard({ ep }) {
   })
 
   function getFileLink(ep) {
-    const base = 'https://cloud.fuken.xyz'
-    const path = ep.episodeFile.path
-    return `${base}/${path.replace('/media/completed', 'tv')}`
+    // TODO make this '/hdd' configurable
+    const path = ep.episodeFile.path.replace('/hdd', '')
+    return settings.fileServer ? `${settings.fileServer}${path}` : ''
   }
 
   return (

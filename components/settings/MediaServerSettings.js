@@ -29,8 +29,13 @@ export default function MediaServerSettings({ settings, settingsKey }) {
   })
 
   const [testLoading, testConnection] = useMutation(async () => {
-    const { data } = await axios.get(url)
-    console.log(data)
+    try {
+      await axios.get(url)
+    } catch (err) {
+      if (err.status >= 400) {
+        throw err
+      }
+    }
     setAlert({ type: 'success', text: 'Todo bien 👌' })
   })
 
