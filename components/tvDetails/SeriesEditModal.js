@@ -1,3 +1,4 @@
+import useLanguagesProfiles from '@/lib/settings/useLanguageProfiles'
 import useQualityProfiles from '@/lib/settings/useQualityProfiles'
 import { editSeries } from '@/lib/tv/tvUtils'
 import useTVDetails from '@/lib/tv/useTVDetails'
@@ -43,6 +44,7 @@ const MONITOR_OPTIONS = [
 export default function SeriesEditModal({ open, setOpen }) {
   const { params } = useQueryParams()
   const { data: profiles } = useQualityProfiles()
+  const { data: langs } = useLanguagesProfiles()
   const { data: details, mutate } = useTVDetails(params.id)
 
   const [form, setForm] = useState({
@@ -58,12 +60,14 @@ export default function SeriesEditModal({ open, setOpen }) {
         ...details.sonarr,
         seasons: details.sonarr.seasons || [],
         profileId: details.sonarr.profileId || null,
+        languageProfileId: details.sonarr.languageProfileId || null,
         seriesType: details.sonarr.seriesType || 'standard'
       })
     }
   }, [details.sonarr])
 
   const selectedProfile = profiles.find(p => p.value === form.profileId)
+  const selectedLang = langs.find(l => l.value === form.languageProfileId)
   const selectedType = TYPE_OPTIONS.find(t => t.value === form.seriesType)
   const selectedMonitoring = MONITOR_OPTIONS.find(opt => opt.value === form?.addOptions?.monitor)
 
@@ -120,6 +124,13 @@ export default function SeriesEditModal({ open, setOpen }) {
           options={profiles}
           selected={selectedProfile}
           onChange={opt => update('profileId', opt.value)}
+        />
+        <Select
+          className="w-full"
+          label="Lenguaje"
+          options={langs}
+          selected={selectedLang}
+          onChange={opt => update('languageProfileId', opt.value)}
         />
         <Select
           className="w-full"
