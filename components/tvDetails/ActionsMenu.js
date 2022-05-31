@@ -31,6 +31,8 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button
+          title="Actions"
+          aria-label="Actions"
           className={getButtonStyle({
             background: 'bg-transparent bg-gray-100 bg-opacity-75 hover:bg-opacity-100',
             color: 'text-gray-600',
