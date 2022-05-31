@@ -19,11 +19,19 @@ function getPadding({ hasIcon, small }) {
 export const buttonFocusStyle =
   'focus:outline-none focus:ring focus:ring-offset-0 focus:ring-blue-500 focus:ring-offset-transparent'
 
-export function getButtonStyle({ small, hasIcon, color, background, border, disabled } = {}) {
+export function getButtonStyle({
+  layout,
+  small,
+  hasIcon,
+  color,
+  background,
+  border,
+  disabled
+} = {}) {
   const _color = color || 'text-primary-900'
   const _background = background || 'bg-white hover:bg-primary-50'
   const _border = border || 'border-white border-2 hover:border-primary-200'
-  const _layout = hasIcon ? `inline-flex justify-center items-center space-x-2` : ''
+  const _layout = layout || (hasIcon ? `inline-flex justify-center items-center space-x-2` : '')
   const _padding = getPadding({ hasIcon, small })
   const _font = small ? 'text-sm font-medium' : 'text-base font-semibold'
   const _disabled = disabled ? 'opacity-50 pointer-events-none' : ''
@@ -34,6 +42,7 @@ export function getButtonStyle({ small, hasIcon, color, background, border, disa
 
 export default function Button({
   as: Component = 'button',
+  layout = '',
   className = '',
   children,
   hasIcon,
@@ -45,6 +54,7 @@ export default function Button({
   ...props
 }) {
   const classes = `${className} ${getButtonStyle({
+    layout,
     hasIcon,
     color,
     background,
