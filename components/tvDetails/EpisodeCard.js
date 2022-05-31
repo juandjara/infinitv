@@ -42,6 +42,16 @@ export default function EpisodeCard({ ep }) {
     return <Tag color="red">Pendiente</Tag>
   }
 
+  function formatDate() {
+    if (sonarrEpisode?.airDateUtc) {
+      const date = new Date(sonarrEpisode?.airDateUtc).toLocaleDateString()
+      const time = new Date(sonarrEpisode?.airDateUtc).toLocaleTimeString().replace(/:00$/, '')
+      return `${date} ${time}`
+    } else {
+      return new Date(ep.air_date).toLocaleDateString()
+    }
+  }
+
   return (
     <li className="px-4 py-3 md:flex items-start md:space-x-3 space-x-0 space-y-3 md:space-y-0">
       {ep.still_path && (
@@ -58,9 +68,7 @@ export default function EpisodeCard({ ep }) {
               Ep. {ep.episode_number} - {ep.name}
             </span>
             <br />
-            <span className="text-gray-500 text-sm">
-              {new Date(ep.air_date).toLocaleDateString()}
-            </span>
+            <span className="text-gray-500 text-sm">{formatDate()}</span>
           </p>
           <p className="max-w-prose mt-1">{ep.overview}</p>
           <p className="font-semibold mt-1">{getEpisodeTag()}</p>
