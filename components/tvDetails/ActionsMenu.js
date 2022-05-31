@@ -7,11 +7,21 @@ import {
   LinkIcon,
   CloudDownloadIcon as CloudDownloadAltIcon
 } from '@heroicons/react/solid'
-import { CloudDownloadIcon, BookmarkIcon as BookmarkIconOutline } from '@heroicons/react/outline'
+import {
+  CloudDownloadIcon,
+  BookmarkIcon as BookmarkIconOutline,
+  ArchiveIcon
+} from '@heroicons/react/outline'
 import { getButtonStyle } from '../common/Button'
 import Spinner from '../common/Spinner'
 
-export default function ActionsMenu({ fileLink, monitored, loading, updateMonitoring }) {
+export default function ActionsMenu({
+  showHistory,
+  fileLink,
+  monitored,
+  loading,
+  updateMonitoring
+}) {
   const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
   const monitorStatusTitle = monitored
     ? 'Eliminar de la lista de seguimiento'
@@ -28,11 +38,12 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
       <div>
         <Menu.Button
           className={getButtonStyle({
-            background: 'bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100',
+            background: 'bg-transparent bg-gray-100 bg-opacity-75 hover:bg-opacity-100',
+            color: 'text-gray-600',
             hasIcon: 'only',
             border: 'border-none'
           })}>
-          <DotsVerticalIcon className="text-gray-500 w-6 h-6" />
+          <DotsVerticalIcon className="text-gray-600 w-6 h-6" />
         </Menu.Button>
       </div>
       <Transition
@@ -49,11 +60,28 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
               {({ active }) => (
                 <a
                   title="Descargar archivo de video"
-                  className={getMenuLinkStyle({ active })}
+                  className={getMenuLinkStyle({
+                    className: 'rounded-t-md space-x-2 w-full flex items-center',
+                    active
+                  })}
                   href={fileLink}>
-                  <LinkIcon className="text-gray-500 w-6 h-6" />
-                  <p className="whitespace-nowrap">Get download link</p>
+                  <LinkIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
+                  <p className="whitespace-nowrap">Enlace de video</p>
                 </a>
+              )}
+            </Menu.Item>
+          )}
+          {showHistory && (
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={getMenuLinkStyle({
+                    className: 'space-x-2 w-full flex items-center',
+                    active
+                  })}>
+                  <ArchiveIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
+                  <p className="whitespace-nowrap">Hist&oacute;rico</p>
+                </button>
               )}
             </Menu.Item>
           )}
@@ -61,7 +89,7 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
             {({ active }) => (
               <button
                 className={getMenuLinkStyle({
-                  className: 'rounded-md space-x-2 w-full flex items-center',
+                  className: 'space-x-2 w-full flex items-center',
                   active
                 })}>
                 <CloudDownloadIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
@@ -73,7 +101,7 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
             {({ active }) => (
               <button
                 className={getMenuLinkStyle({
-                  className: 'rounded-md space-x-2 w-full flex items-center',
+                  className: 'space-x-2 w-full flex items-center',
                   active
                 })}>
                 <CloudDownloadAltIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
@@ -88,7 +116,7 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
               ) : (
                 <button
                   className={getMenuLinkStyle({
-                    className: 'rounded-md space-x-2 w-full flex items-center',
+                    className: 'rounded-b-md space-x-2 w-full flex items-center',
                     active
                   })}
                   onClick={toggleMonitoring}>

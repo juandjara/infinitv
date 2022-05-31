@@ -4,6 +4,7 @@ import useMutation from '@/lib/useMutation'
 import config from '@/lib/config'
 import { useSettings } from '@/lib/settings/useSettings'
 import ActionsMenu from './ActionsMenu'
+import Tag from '../common/Tag'
 
 export default function EpisodeCard({ ep }) {
   const { settings } = useSettings()
@@ -26,8 +27,23 @@ export default function EpisodeCard({ ep }) {
     return settings.fileServer ? `${settings.fileServer}${path}` : ''
   }
 
+  function getEpisodeTag() {
+    const notAired = new Date(sonarrEpisode?.airDateUtc).getTime() > Date.now()
+    if (notAired) {
+      return <Tag color="gray">No emitido</Tag>
+    }
+    if (sonarrEpisode?.hasFile) {
+      return (
+        <Tag color="green">
+          Descargado <small>{sonarrEpisode?.episodeFile.quality.quality.name}</small>
+        </Tag>
+      )
+    }
+    return <Tag color="red">Pendiente</Tag>
+  }
+
   return (
-    <li className="px-4 py-3 md:flex items-center md:space-x-3 space-x-0 space-y-3 md:space-y-0">
+    <li className="px-4 py-3 md:flex items-start md:space-x-3 space-x-0 space-y-3 md:space-y-0">
       {ep.still_path && (
         <img
           className="w-full md:w-auto block mx-auto rounded-lg"
@@ -46,7 +62,8 @@ export default function EpisodeCard({ ep }) {
               {new Date(ep.air_date).toLocaleDateString()}
             </span>
           </p>
-          <p className="mt-2 max-w-prose">{ep.overview}</p>
+          <p className="max-w-prose mt-1">{ep.overview}</p>
+          <p className="font-semibold mt-1">{getEpisodeTag()}</p>
         </div>
         {sonarr?.isSaved && (
           <ActionsMenu
