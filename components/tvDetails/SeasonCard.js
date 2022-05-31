@@ -43,7 +43,6 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
               </Disclosure.Button>
               {sonarr?.isSaved && (
                 <ActionsMenu
-                  showHistory
                   loading={loading}
                   monitored={monitored}
                   updateMonitoring={updateSeasonMonitoring}

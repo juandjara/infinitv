@@ -15,13 +15,7 @@ import {
 import { getButtonStyle } from '../common/Button'
 import Spinner from '../common/Spinner'
 
-export default function ActionsMenu({
-  showHistory,
-  fileLink,
-  monitored,
-  loading,
-  updateMonitoring
-}) {
+export default function ActionsMenu({ fileLink, monitored, loading, updateMonitoring }) {
   const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
   const monitorStatusTitle = monitored
     ? 'Eliminar de la lista de seguimiento'
@@ -71,20 +65,18 @@ export default function ActionsMenu({
               )}
             </Menu.Item>
           )}
-          {showHistory && (
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={getMenuLinkStyle({
-                    className: 'space-x-2 w-full flex items-center',
-                    active
-                  })}>
-                  <ArchiveIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
-                  <p className="whitespace-nowrap">Hist&oacute;rico</p>
-                </button>
-              )}
-            </Menu.Item>
-          )}
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                className={getMenuLinkStyle({
+                  className: 'space-x-2 w-full flex items-center',
+                  active
+                })}>
+                <ArchiveIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
+                <p className="whitespace-nowrap">Hist&oacute;rico</p>
+              </button>
+            )}
+          </Menu.Item>
           <Menu.Item>
             {({ active }) => (
               <button
