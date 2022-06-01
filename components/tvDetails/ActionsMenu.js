@@ -15,7 +15,15 @@ import {
 import { getButtonStyle } from '../common/Button'
 import Spinner from '../common/Spinner'
 
-export default function ActionsMenu({ fileLink, monitored, loading, updateMonitoring }) {
+export default function ActionsMenu({
+  fileLink,
+  loading,
+  monitored,
+  updateMonitoring,
+  toggleHistory,
+  toggleManualSearch,
+  runSearchCommand
+}) {
   const MonitorStatusIcon = monitored ? BookmarkIcon : BookmarkIconOutline
   const monitorStatusTitle = monitored
     ? 'Eliminar de la lista de seguimiento'
@@ -70,6 +78,7 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
           <Menu.Item>
             {({ active }) => (
               <button
+                onClick={toggleHistory}
                 className={getMenuLinkStyle({
                   className: 'space-x-2 w-full flex items-center',
                   active
@@ -82,6 +91,7 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
           <Menu.Item>
             {({ active }) => (
               <button
+                onClick={toggleManualSearch}
                 className={getMenuLinkStyle({
                   className: 'space-x-2 w-full flex items-center',
                   active
@@ -94,6 +104,7 @@ export default function ActionsMenu({ fileLink, monitored, loading, updateMonito
           <Menu.Item>
             {({ active }) => (
               <button
+                onClick={runSearchCommand}
                 className={getMenuLinkStyle({
                   className: 'space-x-2 w-full flex items-center',
                   active

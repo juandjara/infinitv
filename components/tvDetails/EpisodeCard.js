@@ -5,12 +5,15 @@ import config from '@/lib/config'
 import { useSettings } from '@/lib/settings/useSettings'
 import ActionsMenu from './ActionsMenu'
 import Tag from '../common/Tag'
+import { useContext } from 'react'
+import { ModalContext } from '../common/Modal'
 
 export default function EpisodeCard({ ep }) {
   const { settings } = useSettings()
   const { sonarr, mutate } = useSonarrDetails()
   const sonarrEpisode = getSonarrEpisode(sonarr, ep.season_number, ep.episode_number)
   const monitored = sonarrEpisode?.monitored
+  const setModal = useContext(ModalContext)
 
   const [loading, updateMonitoring] = useMutation(async () => {
     await editSonarrEpisodeMonitoring(sonarrEpisode)
@@ -28,7 +31,11 @@ export default function EpisodeCard({ ep }) {
   }
 
   function getEpisodeTag() {
-    const notAired = new Date(sonarrEpisode?.airDateUtc).getTime() > Date.now()
+    const date = sonarrEpisode?.airDateUtc || ep.air_date
+    if (!date) {
+      return ''
+    }
+    const notAired = new Date(date).getTime() > Date.now()
     if (notAired) {
       return <Tag color="gray">No emitido</Tag>
     }
@@ -43,6 +50,7 @@ export default function EpisodeCard({ ep }) {
   }
 
   function formatDate() {
+    if (!sonarrEpisode?.airDateUtc && !ep.air_date) return ''
     if (sonarrEpisode?.airDateUtc) {
       const date = new Date(sonarrEpisode?.airDateUtc).toLocaleDateString()
       const time = new Date(sonarrEpisode?.airDateUtc).toLocaleTimeString().replace(/:00$/, '')
@@ -50,6 +58,10 @@ export default function EpisodeCard({ ep }) {
     } else {
       return new Date(ep.air_date).toLocaleDateString()
     }
+  }
+
+  function toggleHistory() {
+    setModal({ key: 'history', data: { type: 'episode', episode: ep, sonarrEpisode } })
   }
 
   return (
@@ -79,6 +91,7 @@ export default function EpisodeCard({ ep }) {
             monitored={monitored}
             fileLink={getFileLink()}
             updateMonitoring={updateMonitoring}
+            toggleHistory={toggleHistory}
           />
         )}
       </div>

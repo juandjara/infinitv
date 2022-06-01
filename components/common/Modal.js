@@ -1,5 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import { createContext, Fragment } from 'react'
+
+export const ModalContext = createContext()
 
 export default function Modal({ open = false, title = '', children, onClose, className = '' }) {
   return (

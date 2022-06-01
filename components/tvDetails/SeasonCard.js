@@ -5,15 +5,22 @@ import { Disclosure } from '@headlessui/react'
 import useSonarrDetails from '@/lib/tv/useSonarrDetails'
 import SeasonDetails from './SeasonDetails'
 import ActionsMenu from './ActionsMenu'
+import { useContext } from 'react'
+import { ModalContext } from '../common/Modal'
 
 export default function SeasonCard({ season, firstSeason = 1 }) {
   const { sonarr, mutate } = useSonarrDetails()
   const monitored = isSeasonMonitored(sonarr, season.season_number)
+  const setModal = useContext(ModalContext)
 
   const [loading, updateSeasonMonitoring] = useMutation(async () => {
     await editSonarrSeasonMonitoring(sonarr, season.season_number)
     await mutate()
   })
+
+  function toggleHistory() {
+    setModal({ key: 'history', data: { type: 'season', season } })
+  }
 
   return (
     <section>
@@ -46,6 +53,7 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
                   loading={loading}
                   monitored={monitored}
                   updateMonitoring={updateSeasonMonitoring}
+                  toggleHistory={toggleHistory}
                 />
               )}
             </div>

@@ -41,7 +41,7 @@ const MONITOR_OPTIONS = [
   { value: 'none', label: 'Ninguno' }
 ]
 
-export default function SeriesEditModal({ open, setOpen }) {
+export default function SeriesEditModal({ open, onClose }) {
   const { params } = useQueryParams()
   const { data: profiles } = useQualityProfiles()
   const { data: langs } = useLanguagesProfiles()
@@ -79,7 +79,7 @@ export default function SeriesEditModal({ open, setOpen }) {
   async function handleSubmit(ev) {
     ev.preventDefault()
     await updateSeries()
-    setOpen(false)
+    onClose()
   }
 
   function update(key, value) {
@@ -98,7 +98,7 @@ export default function SeriesEditModal({ open, setOpen }) {
 
   if (!details.sonarr) {
     return (
-      <Modal title="Añadir a descargas" open={open} onClose={() => setOpen(false)}>
+      <Modal title="Añadir a descargas" open={open} onClose={onClose}>
         <p className="text-white pt-2 pb-8">
           No hay ningun servidor Sonarr configurado para las descargas de series. Puedes añadir uno
           en la secci&oacute;n <em>Ajustes</em>
@@ -116,7 +116,7 @@ export default function SeriesEditModal({ open, setOpen }) {
     <Modal
       title={form.isSaved ? 'Editar serie' : 'Añadir a descargas'}
       open={open}
-      onClose={() => setOpen(false)}>
+      onClose={onClose}>
       <form className="space-y-6" onSubmit={handleSubmit}>
         <Select
           className="w-full"
@@ -167,7 +167,7 @@ export default function SeriesEditModal({ open, setOpen }) {
             border="border border-transparent"
             background="bg-white bg-opacity-20 hover:bg-opacity-30"
             color="text-white"
-            onClick={() => setOpen(false)}>
+            onClick={onClose}>
             Cancelar
           </Button>
         </div>
