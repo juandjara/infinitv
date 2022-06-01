@@ -64,6 +64,10 @@ export default function EpisodeCard({ ep }) {
     setModal({ key: 'history', data: { type: 'episode', episode: ep, sonarrEpisode } })
   }
 
+  function toggleManualSearch() {
+    setModal({ key: 'manual-search', data: { type: 'episode', episode: ep, sonarrEpisode } })
+  }
+
   return (
     <li className="px-4 py-3 md:flex items-start md:space-x-3 space-x-0 space-y-3 md:space-y-0">
       {ep.still_path && (
@@ -92,6 +96,7 @@ export default function EpisodeCard({ ep }) {
             fileLink={getFileLink()}
             updateMonitoring={updateMonitoring}
             toggleHistory={toggleHistory}
+            toggleManualSearch={toggleManualSearch}
           />
         )}
       </div>

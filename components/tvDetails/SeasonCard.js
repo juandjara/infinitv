@@ -22,6 +22,10 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
     setModal({ key: 'history', data: { type: 'season', season } })
   }
 
+  function toggleManualSearch() {
+    setModal({ key: 'manual-search', data: { type: 'season', season } })
+  }
+
   return (
     <section>
       <Disclosure defaultOpen={season.season_number === firstSeason}>
@@ -54,6 +58,7 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
                   monitored={monitored}
                   updateMonitoring={updateSeasonMonitoring}
                   toggleHistory={toggleHistory}
+                  toggleManualSearch={toggleManualSearch}
                 />
               )}
             </div>
