@@ -1,14 +1,17 @@
 import axios from 'axios'
 import wrapAsync from '@/lib/api/wrapAsync'
-import authMiddleware from '../../../lib/api/authMiddleware'
+import authMiddleware from '@/lib/api/authMiddleware'
 import fetchSonarrConfig from '@/lib/api/fetchSonarrConfig'
+import filterSeries from '@/lib/api/filterSeries'
 
 export default wrapAsync(async (req, res) => {
-  await authMiddleware(req, res)
+  const user = await authMiddleware(req, res)
   const id = Number(req.query.tvdbid)
   const { url, apikey } = await fetchSonarrConfig()
   const data = await axios.get(`${url}/api/series`, { params: { apikey } }).then(res => res.data)
-  const details = data.find(d => d.tvdbId === id)
+  const isDownloaded = data.some(d => d.tvdbId === id)
+  const userSeries = await filterSeries(data, user)
+  const details = userSeries.find(d => d.tvdbId === id)
   if (!details) {
     const lookup = await axios
       .get(`${url}/api/series/lookup`, { params: { apikey, term: `tvdb:${id}` } })
@@ -22,6 +25,7 @@ export default wrapAsync(async (req, res) => {
     return res.json({
       ...show,
       episodes: [],
+      isDownloaded,
       isSaved: false,
       seasonFolder: true,
       addOptions: {
@@ -29,8 +33,8 @@ export default wrapAsync(async (req, res) => {
         searchForCutoffUnmetEpisodes: false,
         searchForMissingEpisodes: true
       },
-      rootFolderPath: '/media/completed', // always use same root folder (TODO: read from config)
-      languageProfileId: 1 // force to use english language profile
+      rootFolderPath: '/hdd/media/tv', // TODO: make this configurable
+      languageProfileId: 1 // default to use english language profile
     })
   }
 
@@ -40,6 +44,7 @@ export default wrapAsync(async (req, res) => {
     .then(res => res.data)
   details.episodes = episodes
   details.isSaved = true
+  details.isDownloaded = isDownloaded
 
   res.json(details)
 })
