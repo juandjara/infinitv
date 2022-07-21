@@ -35,19 +35,29 @@ export default function ActionsMenu({
     updateMonitoring()
   }
 
+  const menuItemsClassName = [
+    loading ? 'opacity-50 pointers-none' : '',
+    'flex flex-col justify-start items-start mt-2 z-10 absolute right-0 origin-top-right rounded-md bg-white shadow-lg'
+  ].join(' ')
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button
           title="Actions"
           aria-label="Actions"
+          disabled={loading}
           className={getButtonStyle({
             background: 'bg-transparent bg-gray-100 bg-opacity-75 hover:bg-opacity-100',
             color: 'text-gray-600',
             hasIcon: 'only',
             border: 'border-none'
           })}>
-          <DotsVerticalIcon className="text-gray-600 w-6 h-6" />
+          {loading ? (
+            <Spinner color="blue-400" size={8} />
+          ) : (
+            <DotsVerticalIcon className="text-gray-600 w-6 h-6" />
+          )}
         </Menu.Button>
       </div>
       <Transition
@@ -58,7 +68,7 @@ export default function ActionsMenu({
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95">
-        <Menu.Items className="flex flex-col justify-start items-start mt-2 z-10 absolute right-0 origin-top-right rounded-md bg-white shadow-lg">
+        <Menu.Items className={menuItemsClassName}>
           {fileLink && (
             <Menu.Item>
               {({ active }) => (
@@ -115,21 +125,17 @@ export default function ActionsMenu({
             )}
           </Menu.Item>
           <Menu.Item>
-            {({ active }) =>
-              loading ? (
-                <Spinner color="blue-400" size={8} />
-              ) : (
-                <button
-                  className={getMenuLinkStyle({
-                    className: 'rounded-b-md space-x-2 w-full flex items-center',
-                    active
-                  })}
-                  onClick={toggleMonitoring}>
-                  <MonitorStatusIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
-                  <p className="whitespace-nowrap">{monitorStatusTitle}</p>
-                </button>
-              )
-            }
+            {({ active }) => (
+              <button
+                className={getMenuLinkStyle({
+                  className: 'rounded-b-md space-x-2 w-full flex items-center',
+                  active
+                })}
+                onClick={toggleMonitoring}>
+                <MonitorStatusIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
+                <p className="whitespace-nowrap">{monitorStatusTitle}</p>
+              </button>
+            )}
           </Menu.Item>
         </Menu.Items>
       </Transition>
