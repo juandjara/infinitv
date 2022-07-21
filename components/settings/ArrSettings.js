@@ -16,7 +16,6 @@ function classNames(...classes) {
 async function tryConnection({ url, apikey }) {
   try {
     const { data } = await axios.get(`${url}/api/system/status?apikey=${apikey}`)
-    console.log(data)
     return data
   } catch (err) {
     throw new Error('Connection test failed')
