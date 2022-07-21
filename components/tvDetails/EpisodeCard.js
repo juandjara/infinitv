@@ -1,4 +1,4 @@
-import { editSonarrEpisodeMonitoring, getSonarrEpisode } from '@/lib/tv/tvUtils'
+import { editSonarrEpisodeMonitoring, getSonarrEpisode, runEpisodeSearch } from '@/lib/tv/tvUtils'
 import useSonarrDetails from '@/lib/tv/useSonarrDetails'
 import useMutation from '@/lib/useMutation'
 import config from '@/lib/config'
@@ -20,12 +20,17 @@ export default function EpisodeCard({ ep }) {
     await mutate()
   })
 
+  const [loadingSearch, runSearch] = useMutation(async () => {
+    await runEpisodeSearch(sonarrEpisode)
+    await mutate()
+  })
+
   function getFileLink() {
     if (!sonarrEpisode?.hasFile) {
       return null
     }
 
-    // TODO make this '/hdd' configurable
+    // TODO make this '/hdd' part configurable
     const path = sonarrEpisode.episodeFile.path.replace('/hdd', '')
     return settings.fileServer ? `${settings.fileServer}${path}` : ''
   }
@@ -91,12 +96,13 @@ export default function EpisodeCard({ ep }) {
         </div>
         {sonarr?.isSaved && (
           <ActionsMenu
-            loading={loading}
+            loading={loading || loadingSearch}
             monitored={monitored}
             fileLink={getFileLink()}
             updateMonitoring={updateMonitoring}
             toggleHistory={toggleHistory}
             toggleManualSearch={toggleManualSearch}
+            runSearchCommand={runSearch}
           />
         )}
       </div>
