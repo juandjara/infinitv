@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react'
-import Button from '@/components/Button'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
+import Button from '@/components/common/Button'
 
 export default function MailSentScreen() {
   const router = useRouter()
