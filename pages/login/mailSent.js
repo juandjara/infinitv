@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react'
-import Button from '@/components/Button'
+import Button from '@/components/common/Button'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 
