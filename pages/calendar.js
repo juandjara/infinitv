@@ -28,7 +28,7 @@ function fetchCalendar(key, hasSettings) {
 
 function useCalendar() {
   const { setAlert } = useAlert()
-  const { hasSonarr } = useSettings()
+  const { hasSonarr, loading } = useSettings()
   const { data, error } = useSWR(['calendar', hasSonarr], fetchCalendar, {
     onError: err => {
       console.error(err)
@@ -38,7 +38,7 @@ function useCalendar() {
 
   return {
     data: data || [],
-    loading: !error && !data,
+    loading: loading || (!error && !data),
     error
   }
 }
