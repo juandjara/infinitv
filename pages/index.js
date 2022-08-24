@@ -17,28 +17,40 @@ const tmdbImageURL = config.tmdbImageUrl
 
 export default function Index() {
   return (
-    <div className="my-4 container mx-auto px-3 md:px-6">
+    <div className="container my-6 mx-auto px-3 md:px-6">
       {/* <section>
         <Heading className="mt-16 px-1">Mis series</Heading>
       </section> */}
       <section>
-        <header className="mt-16 mb-2 flex items-center justify-between">
+        <header className="mt-12 flex items-center justify-between">
           <Heading className="px-1">Añadido recientemente</Heading>
-          <ArrowCircleRightIcon className="h-8 w-8" />
+          <Link href="/downloads">
+            <a title="Ver todo">
+              <ArrowCircleRightIcon className="h-8 w-8" />
+            </a>
+          </Link>
         </header>
         <SonarrSeries />
       </section>
       <section>
-        <header className="mt-16 mb-2 flex items-center justify-between">
+        <header className="mt-12 flex items-center justify-between">
           <Heading className="px-1">Tendencias en series</Heading>
-          <ArrowCircleRightIcon className="h-8 w-8" />
+          <Link href="/series">
+            <a title="Ver todo">
+              <ArrowCircleRightIcon className="h-8 w-8" />
+            </a>
+          </Link>
         </header>
         <TrendingSeries />
       </section>
       <section>
-        <header className="mt-16 mb-2 flex items-center justify-between">
+        <header className="mt-12 flex items-center justify-between">
           <Heading className="px-1">Tendencias en peliculas</Heading>
-          <ArrowCircleRightIcon className="h-8 w-8" />
+          <Link href="/movies">
+            <a title="Ver todo">
+              <ArrowCircleRightIcon className="h-8 w-8" />
+            </a>
+          </Link>
         </header>
         <TrendingMovies />
       </section>
@@ -47,7 +59,7 @@ export default function Index() {
 }
 
 const CARD_WIDTH = 240
-const CARD_HEIGHT = 359
+const CARD_HEIGHT = 355
 
 function Scroller({ children, ...props }) {
   const ulRef = useRef()
@@ -63,7 +75,7 @@ function Scroller({ children, ...props }) {
       <ul
         ref={ulRef}
         style={{ WebkitOverflowScrolling: 'touch' }}
-        className="hide-scrollbar py-2 flex items-stretch justify-start overflow-x-auto max-w-full space-x-4">
+        className="hide-scrollbar px-2 py-3 flex items-stretch justify-start overflow-x-auto max-w-full space-x-4">
         {children}
       </ul>
       <div className="pointer-events-none absolute inset-0 w-full h-full flex items-center justify-between">
