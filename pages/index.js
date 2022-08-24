@@ -47,7 +47,7 @@ export default function Index() {
 }
 
 const CARD_WIDTH = 240
-const CARD_HEIGHT = 350
+const CARD_HEIGHT = 359
 
 function Scroller({ children, ...props }) {
   const ulRef = useRef()
@@ -87,22 +87,25 @@ function Scroller({ children, ...props }) {
 function SonarrSeries() {
   const { series, loading } = useSonarrSeries()
 
-  return (
-    <Scroller>
-      {loading && (
-        <>
-          <SkeletonVideoCard />
-          <SkeletonVideoCard />
-          <SkeletonVideoCard />
-        </>
-      )}
-      {series.map(s => (
-        <li key={s.id} className="flex-shrink-0 w-60">
-          <SonarrVideoCard item={s} />
-        </li>
-      ))}
-    </Scroller>
-  )
+  let children
+
+  if (loading) {
+    children = (
+      <>
+        <SkeletonVideoCard />
+        <SkeletonVideoCard />
+        <SkeletonVideoCard />
+      </>
+    )
+  } else {
+    children = series.map(s => (
+      <li key={s.id} className="flex-shrink-0 w-60">
+        <SonarrVideoCard item={s} />
+      </li>
+    ))
+  }
+
+  return <Scroller>{children}</Scroller>
 }
 
 function TrendingSeries() {
