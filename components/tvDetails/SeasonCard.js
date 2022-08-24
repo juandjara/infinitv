@@ -7,11 +7,14 @@ import SeasonDetails from './SeasonDetails'
 import ActionsMenu from './ActionsMenu'
 import { useContext } from 'react'
 import { ModalContext } from '../common/Modal'
+import useRoleCheck from '@/lib/auth/useRoleCheck'
 
 export default function SeasonCard({ season, firstSeason = 1 }) {
   const { sonarr, mutate } = useSonarrDetails()
   const monitored = isSeasonMonitored(sonarr, season.season_number)
   const setModal = useContext(ModalContext)
+  const isAdmin = useRoleCheck('superadmin')
+  const showSettings = sonarr?.isSaved && isAdmin
 
   const [loading, updateSeasonMonitoring] = useMutation(async () => {
     await editSonarrSeasonMonitoring(sonarr, season.season_number)
@@ -52,7 +55,7 @@ export default function SeasonCard({ season, firstSeason = 1 }) {
                   </p>
                 </div>
               </Disclosure.Button>
-              {sonarr?.isSaved && (
+              {showSettings && (
                 <ActionsMenu
                   loading={loading}
                   monitored={monitored}

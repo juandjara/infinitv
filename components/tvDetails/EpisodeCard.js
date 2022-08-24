@@ -7,6 +7,7 @@ import ActionsMenu from './ActionsMenu'
 import Tag from '../common/Tag'
 import { useContext } from 'react'
 import { ModalContext } from '../common/Modal'
+import useRoleCheck from '@/lib/auth/useRoleCheck'
 
 export default function EpisodeCard({ ep }) {
   const { settings } = useSettings()
@@ -14,6 +15,8 @@ export default function EpisodeCard({ ep }) {
   const sonarrEpisode = getSonarrEpisode(sonarr, ep.season_number, ep.episode_number)
   const monitored = sonarrEpisode?.monitored
   const setModal = useContext(ModalContext)
+  const isAdmin = useRoleCheck('superadmin')
+  const showSettings = sonarr?.isSaved && isAdmin
 
   const [loading, updateMonitoring] = useMutation(async () => {
     await editSonarrEpisodeMonitoring(sonarrEpisode)
@@ -94,7 +97,7 @@ export default function EpisodeCard({ ep }) {
           <p className="max-w-prose mt-1">{ep.overview}</p>
           <p className="font-semibold mt-1">{getEpisodeTag()}</p>
         </div>
-        {sonarr?.isSaved && (
+        {showSettings && (
           <ActionsMenu
             loading={loading || loadingSearch}
             monitored={monitored}

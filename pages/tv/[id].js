@@ -1,8 +1,9 @@
 import config from '@/lib/config'
 import useTVDetails from '@/lib/tv/useTVDetails'
 import { useQueryParams } from '@/lib/useQueryParams'
-import { StarIcon } from '@heroicons/react/solid'
-import { AdjustmentsIcon } from '@heroicons/react/outline'
+import { AdjustmentsIcon, HeartIcon, StarIcon } from '@heroicons/react/outline'
+import { PlayIcon, CloudDownloadIcon } from '@heroicons/react/solid'
+
 import BackButton from '@/components/common/BackButton'
 import Button from '@/components/common/Button'
 import { useState } from 'react'
@@ -14,6 +15,7 @@ import PersonCard from '@/components/tvDetails/PersonCard'
 import FullPageSpinner from '@/components/common/FullPageLoading'
 import Heading from '@/components/common/Heading'
 import Modal, { ModalContext } from '@/components/common/Modal'
+import useRoleCheck from '@/lib/auth/useRoleCheck'
 
 function HistoryModal({ open, onClose }) {
   return <Modal title="H&iacute;storico" open={open} onClose={onClose}></Modal>
@@ -32,6 +34,8 @@ export default function TvDetails() {
   const [modal, setModal] = useState({ key: null })
 
   const firstSeasonNumber = data?.seasons[0]?.season_number
+  const isAdmin = useRoleCheck('superadmin')
+  const showSettings = data.sonarr?.isSaved && isAdmin
 
   function closeModal() {
     setModal({ key: null })
@@ -87,7 +91,7 @@ export default function TvDetails() {
                 </p>
                 <p className="text-xl flex items-center space-x-2">
                   <StarIcon className="w-8 h-8 text-yellow-200" />
-                  <span>{data.vote_average} / 10</span>
+                  <span>{data.vote_average.toFixed(2)} / 10</span>
                 </p>
                 <p className="text-2xl text-gray-300 pt-8">{data.tagline}</p>
                 <p className="text-base max-w-prose leading-relaxed">{data.overview}</p>
@@ -96,7 +100,7 @@ export default function TvDetails() {
           </div>
         </div>
         <div className="container mx-auto px-3 py-6 flex flex-col md:flex-row justify-center md:space-x-6 space-x-0 space-y-6 md:space-y-0">
-          <div style={{ width: 342 }} className="space-y-8 flex-shrink-0">
+          <aside style={{ width: 342 }} className="space-y-8 flex-shrink-0">
             <Networks networks={data.networks} />
             <WatchProviders watchProviders={data['watch/providers']['results'][watchRegion]} />
             <div>
@@ -107,28 +111,48 @@ export default function TvDetails() {
                 ))}
               </ul>
             </div>
-          </div>
-          <div className="order-first md:order-none flex-grow space-y-8 mt-10 pb-4">
-            <div className="px-1 flex justify-between items-center">
+          </aside>
+          <div className="order-first md:order-none flex-grow mt-10 pb-4">
+            <header className="px-1 mb-4 flex justify-between items-center space-x-4">
               <p className="text-3xl text-accent-100">Temporadas</p>
+              <span className="flex-grow"></span>
               <Button
-                hasIcon={data.sonarr?.isSaved ? 'only' : null}
-                title="Editar serie"
+                hasIcon="only"
+                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                border="border-none">
+                <PlayIcon className="text-blue-900 w-6 h-6" />
+              </Button>
+              <Button
+                hasIcon="only"
+                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                border="border-none">
+                <CloudDownloadIcon className="text-blue-900 w-6 h-6" />
+              </Button>
+              <Button
+                hasIcon="only"
                 background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
                 border="border-none"
-                onClick={() => setModal({ key: 'series-edit' })}>
-                {data.sonarr?.isSaved ? (
-                  <AdjustmentsIcon title="Editar serie" className="text-gray-500 w-6 h-6" />
-                ) : (
-                  <p>Añadir a descargas</p>
-                )}
+                title="Añadir a favoritos">
+                <HeartIcon className="text-blue-900 w-6 h-6" />
               </Button>
-            </div>
-            {data.seasons
-              .filter(s => s.season_number > 0)
-              .map(s => (
-                <SeasonCard key={s.id} firstSeason={firstSeasonNumber} season={s} />
-              ))}
+              {showSettings ? (
+                <Button
+                  hasIcon="only"
+                  background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+                  border="border-none"
+                  title="Ajustes"
+                  onClick={() => setModal({ key: 'series-edit' })}>
+                  <AdjustmentsIcon className="text-blue-900 w-6 h-6" />
+                </Button>
+              ) : null}
+            </header>
+            <ul className="space-y-8 block">
+              {data.seasons
+                .filter(s => s.season_number > 0)
+                .map(s => (
+                  <SeasonCard key={s.id} firstSeason={firstSeasonNumber} season={s} />
+                ))}
+            </ul>
           </div>
         </div>
       </main>
