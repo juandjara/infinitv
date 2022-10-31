@@ -35,7 +35,7 @@ export default function TvDetails() {
 
   const firstSeasonNumber = data?.seasons[0]?.season_number
   const isAdmin = useRoleCheck('superadmin')
-  const showSettings = data.sonarr?.isSaved && isAdmin
+  const showSettings = data?.sonarr?.isSaved && isAdmin
 
   function closeModal() {
     setModal({ key: null })
@@ -99,8 +99,8 @@ export default function TvDetails() {
             </header>
           </div>
         </div>
-        <div className="container mx-auto px-3 py-6 flex flex-col md:flex-row justify-center md:space-x-6 space-x-0 space-y-6 md:space-y-0">
-          <aside style={{ width: 342 }} className="space-y-8 flex-shrink-0">
+        <div className="container mx-auto px-3 py-4 flex flex-col md:flex-row justify-center md:space-x-6 space-x-0 space-y-6 md:space-y-0">
+          <aside style={{ maxWidth: 342 }} className="space-y-8 flex-shrink-0 mt-7">
             <Networks networks={data.networks} />
             <WatchProviders watchProviders={data['watch/providers']['results'][watchRegion]} />
             <div>
@@ -112,9 +112,9 @@ export default function TvDetails() {
               </ul>
             </div>
           </aside>
-          <div className="order-first md:order-none flex-grow mt-10 pb-4">
+          <div className="order-first md:order-none flex-grow pb-4">
             <header className="px-1 mb-4 flex justify-between items-center space-x-4">
-              <p className="text-3xl text-accent-100">Temporadas</p>
+              {/* <p className="text-3xl text-accent-100">Temporadas</p> */}
               <span className="flex-grow"></span>
               <Button
                 hasIcon="only"

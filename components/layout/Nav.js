@@ -18,6 +18,7 @@ function TransitionMenuIcon({ as: Component, show }) {
 }
 
 const links = [
+  { href: '/', text: 'Inicio', exact: true },
   { href: '/tv', text: 'Series' },
   { href: '/movies', text: 'Peliculas' },
   { href: '/calendar', text: 'Calendario' },
@@ -44,14 +45,14 @@ export default function Nav() {
 
   return (
     <>
-      <div className="py-3 w-full hidden md:flex flex-1 md:space-x-2">
+      <div className="pl-4 hidden md:flex md:space-x-2">
         {filteredLinks.map(l => (
-          <NavLink key={l.href} href={l.href}>
+          <NavLink key={l.href} href={l.href} exact={l.exact}>
             {l.text}
           </NavLink>
         ))}
       </div>
-      <div className="w-full my-1 md:hidden flex-1 z-20 relative">
+      <div className="md:hidden z-20 relative">
         <Menu>
           {({ open }) => (
             <>

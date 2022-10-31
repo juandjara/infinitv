@@ -48,6 +48,7 @@ export default function ActionsMenu({
           aria-label="Actions"
           disabled={loading}
           className={getButtonStyle({
+            small: true,
             background: 'bg-transparent bg-gray-100 bg-opacity-75 hover:bg-opacity-100',
             color: 'text-gray-600',
             hasIcon: 'only',
@@ -56,7 +57,7 @@ export default function ActionsMenu({
           {loading ? (
             <Spinner color="blue-400" size={8} />
           ) : (
-            <DotsVerticalIcon className="text-gray-600 w-6 h-6" />
+            <DotsVerticalIcon className="text-gray-600 w-5 h-5" />
           )}
         </Menu.Button>
       </div>
