@@ -54,7 +54,8 @@ export default function EpisodeCard({ ep }) {
         </Tag>
       )
     }
-    return <Tag color="red">Pendiente</Tag>
+    return ''
+    // return <Tag color="red">Pendiente</Tag>
   }
 
   function formatDate() {
@@ -77,7 +78,7 @@ export default function EpisodeCard({ ep }) {
   }
 
   return (
-    <li className="px-4 py-3 md:flex items-start md:space-x-3 space-x-0 space-y-3 md:space-y-0">
+    <li className="mx-4 md:flex items-start md:space-x-3 space-x-0 space-y-3 md:space-y-0">
       {ep.still_path && (
         <img
           className="w-full md:w-auto block mx-auto rounded-lg"
@@ -86,16 +87,13 @@ export default function EpisodeCard({ ep }) {
         />
       )}
       <div className="flex-grow flex items-start space-x-2">
-        <div className="flex-grow">
-          <p className="flex items-center space-x-2">
-            <span className="text-primary-600">
-              Ep. {ep.episode_number} - {ep.name}
-            </span>
-            <br />
-            <span className="text-gray-500 text-sm">{formatDate()}</span>
+        <div className="flex-grow space-y-2">
+          <p className="text-primary-600">
+            Ep. {ep.episode_number} - {ep.name}
           </p>
-          <p className="max-w-prose mt-1">{ep.overview}</p>
+          <p className="text-gray-500 text-sm">{formatDate()}</p>
           <p className="font-semibold mt-1">{getEpisodeTag()}</p>
+          <p className="max-w-prose mt-1">{ep.overview}</p>
         </div>
         {showSettings && (
           <ActionsMenu

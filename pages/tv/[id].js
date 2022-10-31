@@ -99,8 +99,18 @@ export default function TvDetails() {
             </header>
           </div>
         </div>
-        <div className="container mx-auto px-3 py-4 flex flex-col md:flex-row justify-center md:space-x-6 space-x-0 space-y-6 md:space-y-0">
-          <aside style={{ maxWidth: 342 }} className="space-y-8 flex-shrink-0 mt-7">
+        <div className="container mx-auto px-3 py-4 md:flex justify-center">
+          <div className="flex-grow pb-4 md:mx-6">
+            <ShowToolbar showSettings={showSettings} setModal={setModal} />
+            <ul className="space-y-8 block">
+              {data.seasons
+                .filter(s => s.season_number > 0)
+                .map(s => (
+                  <SeasonCard key={s.id} firstSeason={firstSeasonNumber} season={s} />
+                ))}
+            </ul>
+          </div>
+          <aside style={{ maxWidth: 342 }} className="order-first space-y-8 flex-shrink-0 mt-7">
             <Networks networks={data.networks} />
             <WatchProviders watchProviders={data['watch/providers']['results'][watchRegion]} />
             <div>
@@ -112,50 +122,44 @@ export default function TvDetails() {
               </ul>
             </div>
           </aside>
-          <div className="order-first md:order-none flex-grow pb-4">
-            <header className="px-1 mb-4 flex justify-between items-center space-x-4">
-              {/* <p className="text-3xl text-accent-100">Temporadas</p> */}
-              <span className="flex-grow"></span>
-              <Button
-                hasIcon="only"
-                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-                border="border-none">
-                <PlayIcon className="text-blue-900 w-6 h-6" />
-              </Button>
-              <Button
-                hasIcon="only"
-                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-                border="border-none">
-                <CloudDownloadIcon className="text-blue-900 w-6 h-6" />
-              </Button>
-              <Button
-                hasIcon="only"
-                background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-                border="border-none"
-                title="Añadir a favoritos">
-                <HeartIcon className="text-blue-900 w-6 h-6" />
-              </Button>
-              {showSettings ? (
-                <Button
-                  hasIcon="only"
-                  background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
-                  border="border-none"
-                  title="Ajustes"
-                  onClick={() => setModal({ key: 'series-edit' })}>
-                  <AdjustmentsIcon className="text-blue-900 w-6 h-6" />
-                </Button>
-              ) : null}
-            </header>
-            <ul className="space-y-8 block">
-              {data.seasons
-                .filter(s => s.season_number > 0)
-                .map(s => (
-                  <SeasonCard key={s.id} firstSeason={firstSeasonNumber} season={s} />
-                ))}
-            </ul>
-          </div>
         </div>
       </main>
     </ModalContext.Provider>
+  )
+}
+
+function ShowToolbar({ showSettings, setModal }) {
+  return (
+    <div role="toolbar" className="px-1 mb-4 flex justify-end items-center space-x-4">
+      <Button
+        hasIcon="only"
+        background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+        border="border-none">
+        <PlayIcon className="text-blue-900 w-6 h-6" />
+      </Button>
+      <Button
+        hasIcon="only"
+        background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+        border="border-none">
+        <CloudDownloadIcon className="text-blue-900 w-6 h-6" />
+      </Button>
+      <Button
+        hasIcon="only"
+        background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+        border="border-none"
+        title="Añadir a favoritos">
+        <HeartIcon className="text-blue-900 w-6 h-6" />
+      </Button>
+      {showSettings ? (
+        <Button
+          hasIcon="only"
+          background="bg-transparent bg-gray-100 bg-opacity-50 hover:bg-opacity-100"
+          border="border-none"
+          title="Ajustes"
+          onClick={() => setModal({ key: 'series-edit' })}>
+          <AdjustmentsIcon className="text-blue-900 w-6 h-6" />
+        </Button>
+      ) : null}
+    </div>
   )
 }
