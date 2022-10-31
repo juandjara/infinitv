@@ -102,7 +102,7 @@ export default function TvDetails() {
         <div className="container mx-auto px-3 py-4 md:flex justify-center">
           <div className="flex-grow pb-4 md:mx-6">
             <ShowToolbar showSettings={showSettings} setModal={setModal} />
-            <ul className="space-y-8 block">
+            <ul className="space-y-4">
               {data.seasons
                 .filter(s => s.season_number > 0)
                 .map(s => (

@@ -9,7 +9,7 @@ export default function WatchProviders({ watchProviders }) {
     <div>
       <p className="mb-2 ml-1 leading-tight text-lg text-accent-100">Ahora en streaming en</p>
       <ul className="bg-accent-100 bg-opacity-20 rounded-xl p-3 grid grid-cols-4 gap-y-6 gap-x-2">
-        {watchProviders.flatrate.map(wp => (
+        {(watchProviders.flatrate || watchProviders.ads || []).map(wp => (
           <li key={wp.provider_id} className="flex-shrink-0">
             <a target="_blank" rel="noopener noreferrer" href={watchProviders.link}>
               <img

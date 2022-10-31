@@ -17,7 +17,7 @@ export default function SeasonDetails({ season }) {
   return (
     <div className="bg-opacity-80 text-gray-900 bg-white rounded-b-xl">
       {details.overview && <p className="max-w-prose mb-4 px-4">{details.overview}</p>}
-      <ul className="rounded-b-xl border-t border-blue-300 space-y-8 py-8">
+      <ul className="rounded-b-xl border-t border-gray-300 space-y-8 py-8">
         {details.episodes.map(ep => (
           <EpisodeCard key={ep.id} ep={ep} />
         ))}

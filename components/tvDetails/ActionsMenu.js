@@ -89,6 +89,7 @@ export default function ActionsMenu({
           <Menu.Item>
             {({ active }) => (
               <button
+                title="Mostrar historico"
                 onClick={toggleHistory}
                 className={getMenuLinkStyle({
                   className: 'space-x-2 w-full flex items-center',
@@ -102,13 +103,14 @@ export default function ActionsMenu({
           <Menu.Item>
             {({ active }) => (
               <button
+                title="Descargar todos los capitulos monitorizados"
                 onClick={toggleManualSearch}
                 className={getMenuLinkStyle({
                   className: 'space-x-2 w-full flex items-center',
                   active
                 })}>
                 <CloudDownloadIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
-                <p className="whitespace-nowrap">B&uacute;squeda manual</p>
+                <p className="whitespace-nowrap">Descarga manual</p>
               </button>
             )}
           </Menu.Item>
@@ -121,7 +123,7 @@ export default function ActionsMenu({
                   active
                 })}>
                 <CloudDownloadAltIcon className={`text-gray-${active ? '100' : '500'} w-6 h-6`} />
-                <p className="whitespace-nowrap">B&uacute;squeda autom&aacute;tica</p>
+                <p className="whitespace-nowrap">Descarga autom&aacute;tica</p>
               </button>
             )}
           </Menu.Item>
